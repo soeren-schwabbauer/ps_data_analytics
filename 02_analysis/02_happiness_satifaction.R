@@ -43,14 +43,19 @@ summary(romania$feel_happy)
 ### income (Sören) ###########
 # comparing two quantitative variables by mosaic plot
 romania$feel_happy <- as_factor(romania$feel_happy)
+romania$satisfaction_life <- as_factor(romania$satisfaction_life)
 romania$income_scale <- as_factor(romania$income_scale)
 
+# happiness
 ggplot(data = romania) +
   geom_mosaic(aes(x =  product(feel_happy, income_scale), fill = feel_happy))
 
 # note: it can be seen, that ...
 
-
+# satisfaction
+ggplot(data = romania) +
+  geom_mosaic(aes(x =  product(satisfaction_life, income_scale), fill = satisfaction_life))
+# note: it can be seen, that
 
 ### health ###########
 
