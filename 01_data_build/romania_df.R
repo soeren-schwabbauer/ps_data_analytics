@@ -1,9 +1,14 @@
 rm(list = ls())
-
+################################################################################
+# Course: Data Analytics - PS
+# Date: 13.10.2022
+# Purpose: Relabel variables
+################################################################################
 
 # load libraries
 library(dplyr)
 library(readxl)
+library(haven)
 
 # load df
 INPUT = "G:/Geteilte Ablagen/data_analytics/01_data_build/INPUT/"
@@ -24,11 +29,14 @@ codebook <- read_excel(paste0(CODEBOOK, "99_codebook.xlsx")) %>%
 var_id <- codebook %>% pull(var_id)
 variable <- codebook %>% pull(variable)
 
+
 # command to relabel variables
 romania <- data %>%
+  
+  rename_at(vars(paste0(var_id, "")), function(x) variable)  # rename variables
+# A003 doesn't exist in df
 
-  rename_at(vars(paste0(var_id, "")), function(x) variable)   # rename variables
 
-
-save(romania, paste0(OUTPUT, "romania.rda"))
+##### save file
+save(romania, file = paste0(OUTPUT, "romania.rda"))
 
