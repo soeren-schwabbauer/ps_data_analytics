@@ -11,9 +11,20 @@ library(readxl)
 library(haven)
 
 # load df
+if (dir.exists("G:/Geteilte Ablagen/")) {
+  
 INPUT = "G:/Geteilte Ablagen/data_analytics/01_data_build/INPUT/"
 OUTPUT = "G:/Geteilte Ablagen/data_analytics/01_data_build/OUTPUT/"
 CODEBOOK = "G:/Geteilte Ablagen/data_analytics/"
+
+} else if (dir.exists("G:/Shared drives/")) {
+  
+
+INPUT = "G:/Shared drives/data_analytics/01_data_build/INPUT/"
+OUTPUT = "G:/Shared drives/data_analytics/01_data_build/OUTPUT/"
+CODEBOOK = "G:/Shared drives/data_analytics/"
+
+}
 
 
 ##### load files
