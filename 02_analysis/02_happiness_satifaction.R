@@ -13,9 +13,20 @@ library(ggplot2)
 library(ggmosaic)
 
 # load df
-INPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/INPUT/"
-OUTPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/OUTPUT/"
-#CODEBOOK = "G:/Geteilte Ablagen/data_analytics/"
+if (dir.exists("G:/Geteilte Ablagen/")) {
+  
+  INPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/INPUT/"
+  OUTPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/OUTPUT/"
+  CODEBOOK = "G:/Geteilte Ablagen/data_analytics/"
+  
+} else if (dir.exists("G:/Shared drives/")) {
+  
+  
+  INPUT = "G:/Shared drives/data_analytics/02_analysis/INPUT/"
+  OUTPUT = "G:/Shared drives/data_analytics/02_analysis/OUTPUT/"
+  CODEBOOK = "G:/Shared drives/data_analytics/"
+  
+}
 
 
 ##### load files
