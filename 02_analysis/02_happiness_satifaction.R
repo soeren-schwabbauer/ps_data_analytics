@@ -52,14 +52,36 @@ summary(romania$feel_happy)
 # mosaic tutorial: https://haleyjeppson.github.io/ggmosaic/reference/geom_mosaic.html
 
 ### income (Sören) ###########
-# comparing two quantitative variables by mosaic plot
-romania$feel_happy <- as_factor(romania$feel_happy)
-romania$satisfaction_life <- as_factor(romania$satisfaction_life)
-romania$income_scale <- as_factor(romania$income_scale)
+theme_mosaic <- theme( 
+  #legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  axis.text.x = element_text(angle=90),
+  panel.background = element_rect(fill = "white"),
+  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                    colour = "white") ,
+    
+  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+) 
 
-# happiness
+# comparing two quantitative variables by mosaic plot
+romania$feel_happy <- as_factor(romania$feel_happy) %>%
+  droplevels()
+romania$satisfaction_life <- as_factor(romania$satisfaction_life) %>%
+  droplevels()
+romania$income_scale <- as_factor(romania$income_scale) %>%
+  droplevels()
+
+summary(romania$feel_happy)
+# happiness #####
 ggplot(data = romania) +
-  geom_mosaic(aes(x =  product(feel_happy, income_scale), fill = feel_happy))
+  geom_mosaic(aes(x =  product(feel_happy, income_scale), fill = feel_happy)) +
+  
+  labs(title ="Comparison of satisfaction and income",
+       fill = "Scale of happiness") +
+       
+  
+  theme_mosaic
 
 # note: it can be seen, that ...
 
