@@ -59,7 +59,11 @@ romania <- romania %>%
          
          health_fac = as_factor(health),
          
-         marst_fac = as_factor(marst))
+         marst_fac = as_factor(marst),
+         
+         age_fac = as_factor(age)) %>%
+  
+  mutate(age = as.numeric(age))
 
 
 
