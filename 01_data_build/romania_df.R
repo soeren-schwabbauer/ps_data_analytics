@@ -6,6 +6,7 @@ rm(list = ls())
 ################################################################################
 
 # load libraries
+library(stringr)
 library(dplyr)
 library(readxl)
 library(haven)
@@ -46,6 +47,20 @@ romania <- data %>%
   
   rename_at(vars(paste0(var_id, "")), function(x) variable)  # rename variables
 # A003 doesn't exist in df
+
+
+# mutate new variables to factor
+romania <- romania %>%
+  
+  mutate(satisfaction_life_fac = as_factor(satisfaction_life),
+         
+         feel_happy_fac = as_factor(feel_happy),
+
+         income_scale_fac = as_factor(income_scale))
+
+
+
+  
 
 
 ##### save file
