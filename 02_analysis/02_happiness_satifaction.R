@@ -148,10 +148,44 @@ barplot_variable(health_fac) +
   
   labs(title = "Health distribution")
 ## INTERPRETATION: 
+##The average citizen seems to be in rather good health condition. Most of the answers
+##group around the "good" health answer. The second most frequent answer is the
+##"fair" health response. A very small percentage of respondents report being of
+##"poor" or "very poor" health. 
+median(romania$health)
+##This is supported by the median value of the "health" variable which confirms,
+##that the average citizen is of Good health
 
 
 ### age ########################################################################
+ 
+ ##overall overview
+summary(romania$age)
+sd(romania$age)
+ #The range of the data is 63 years with the youngest respondent being 19 and the oldest
+ #being 82 years old. The average respondent is around 50 years old.
 
+barplot_variable(romania$age)
+ #The barplot doesn't reveal any significant peaks within the population. There are a 
+ #couple values which appear more frequent than others but none of them qualifies as 
+ #an absolute peak
+
+
+ ##Looking closer into the distribution of age
+ ###Making a copy Dataset so I don't screw anything up
+data <-  romania
+data$age <-  as.numeric(data$age)
+
+male <-  subset(data, data$sex == 1)
+female <-  subset(data, data$sex ==2)
+
+par(mfrow=c(1,2))
+hist(female$age)
+hist(male$age)
+mean(male$age)
+mean(female$age)
+ #The visualisation of age distribution overall and separated by sex supports
+ #the insight, that there is no significant difference or trend in age distribution.
 
 
 ### marital status #############################################################
