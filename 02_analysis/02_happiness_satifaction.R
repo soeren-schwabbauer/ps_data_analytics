@@ -13,6 +13,7 @@ library(ggplot2)
 library(ggmosaic)
 library(lazyeval)
 library(gridExtra)
+library(ggmosaic)
 
 # load df
 if (dir.exists("G:/Geteilte Ablagen/")) {
@@ -39,9 +40,18 @@ theme_mosaic <- theme(
   panel.background = element_rect(fill = "white"),
   panel.grid.major.y = element_line(size = 0, linetype = 'solid',
                                     colour = "white") ,
-  
+  legend.position = "none",
   plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
 ) 
+
+theme_barplot <- theme(
+  legend.position = "none",
+  axis.title.x = element_blank(),
+  panel.background = element_rect(fill = "white"),
+  panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                    colour = "grey") ,
+) 
+  
 ################################################################################
 
 
@@ -51,20 +61,25 @@ load(paste0(INPUT, "Romania.rda"))
 
 ###### 1. explore main variables (UNIVARIATE ANALYSIS) #########################
 
-# factorize both variables (maybe add to 01)
-romania$satisfaction_life <- as_factor(romania$satisfaction_life)
-romania$feel_happy <- as_factor(romania$feel_happy)
-
-distri_var <- function(var, varchar){
-  
+barplot_variable <- function(var){
   romania %>%
-    group_by({{var}}) %>%
-    summarize(n = n()) %>%
-    rename(factor = {{var}}) %>%
-    mutate(perc = n/ sum(n), 
-           group = varchar)
-# this function outputs a %distibution and a total distribution of the main
-# varibales
+    ggplot(aes(x= {{var}}, y= ..count.. , fill = {{var}})) +
+    geom_bar() +
+    labs(x = "",
+         y = "total number") +
+    geom_text(stat = "count", aes(label=..count..), vjust = -0.5) +
+    
+    theme_barplot
+}
+
+
+mosaic_var1_var2 <- function(var1, var2){
+  romania %>%
+    ggplot() +
+    geom_mosaic(aes(x =  product({{var1}}, {{var2}}), fill = {{var1}})) +
+
+    theme_mosaic
+
 }
 
 #### A170 satisfaction in life #################################################
@@ -73,14 +88,10 @@ summary(romania$satisfaction_life)
 # only serious answers, no na's, missing, or unrealistic values
 
 # plot satsfaction
-distri_var(satisfaction_life, "satisfaction_life") %>%
-  ggplot(aes(fill = factor, y= n, x= factor)) + 
-  geom_bar(position="dodge", stat="identity") +
-  labs(title = "Overall life satisfaction",
-       x = "",
-       y = "total number",
-       fill = "Level of satisfaction") 
 
+
+barplot_variable(satisfaction_life_fac) + 
+  labs(title = "Overall life satisfaction") 
 # CONCLUSION: tbc...
 
 
@@ -91,13 +102,8 @@ summary(romania$feel_happy)
 # only serious answers, no na's, missing, or unrealistic values
 
 # plot happiness
-distri_var(feel_happy, "feel_happy") %>%
-  ggplot(aes(fill = factor, y= n, x= factor)) + 
-    geom_bar(position="dodge", stat="identity") +
-  labs(title = "Overall feeling of happiness",
-       x = "",
-       y = "total number",
-       fill="Level of happiness")
+barplot_variable(feel_happy_fac) +
+  labs(title = "Overall feeling of happiness")
 
 # CONCLUSION: tbc...
 
@@ -106,43 +112,31 @@ distri_var(feel_happy, "feel_happy") %>%
 
 ###### 2. MULTIVARIATE ANALYSIS ################################################
 # comparing two quantitative variables by mosaic plot
-romania$satisfaction_life <- as_factor(romania$satisfaction_life) %>%
-  droplevels()
-romania$income_scale <- as_factor(romania$income_scale) %>%
-  droplevels()
-romania$feel_happy <- as_factor(romania$feel_happy) %>%
-  droplevels()
+romania$satisfaction_life_fac <- droplevels(romania$satisfaction_life_fac)
+romania$income_scale_fac <- droplevels(romania$income_scale_fac)
+romania$feel_happy_fac <- droplevels(romania$feel_happy_fac)
 
 ### income (Sören) #############################################################
 
 ### income distribution
-romania %>%
-  ggplot(aes(x= income_scale, y= ..count.. , fill = income_scale )) +
-  geom_bar() +
-  labs(title = "Income distribution",
-       x = "",
-       y = "total number",
-       fill="Level of happiness") +
-  theme(legend.position = "none")
-
+barplot_variable(income_scale_fac) +
+  
+  labs(title = "Income distribution") 
 # DESCRIBE WHAT YOU SEE
 
-inc_happy <- romania %>%
-  ggplot() +
-  geom_mosaic(aes(x =  product(feel_happy, income_scale), fill = feel_happy)) +
-  
-  labs(title ="Comparison of happiness and income",
-       fill = "Scale of happiness") +
-  theme(legend.position = "none") +
-  theme_mosaic
+
+### mosaic plots
+inc_happy <- mosaic_var1_var2(feel_happy_fac, income_scale_fac) +
+  labs(title ="Comparison of satisfaction in life and income",
+       fill = "Scale of satisfaction")
+
 
 inc_satis <- romania %>%
   ggplot() +
-  geom_mosaic(aes(x =  product(satisfaction_life, income_scale), fill = satisfaction_life)) +
+  geom_mosaic(aes(x =  product(satisfaction_life_fac, income_scale_fac), fill = satisfaction_life_fac)) +
   
   labs(title ="Comparison of satisfaction in life and income",
        fill = "Scale of satisfaction") +
-  theme(legend.position = "none") +
   theme_mosaic
 
 grid.arrange(inc_happy, inc_satis, nrow = 1)
@@ -150,7 +144,10 @@ grid.arrange(inc_happy, inc_satis, nrow = 1)
 
 
 ### health #####################################################################
-
+barplot_variable(health_fac) +
+  
+  labs(title = "Health distribution")
+## INTERPRETATION: 
 
 
 ### age ########################################################################
@@ -158,6 +155,9 @@ grid.arrange(inc_happy, inc_satis, nrow = 1)
 
 
 ### marital status #############################################################
-
+barplot_variable(marst_fac) +
+  
+  labs(title = "Marriage distribution")
+## INTERPRETATION: 
 
 ### additional variables #######################################################
