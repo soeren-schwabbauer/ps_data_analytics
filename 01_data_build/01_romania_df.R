@@ -51,9 +51,9 @@ romania <- data %>%
 # mutate new variables to factor
 romania <- romania %>%
   
-  mutate(satisfaction_life_fac = as_factor(satisfaction_life),
+  mutate(satisfaction_fac = as_factor(satisfaction),
          
-         feel_happy_fac = as_factor(feel_happy),
+         happy_fac = as_factor(happy),
 
          income_scale_fac = as_factor(income_scale),
          
@@ -61,11 +61,21 @@ romania <- romania %>%
          
          marst_fac = as_factor(marst),
          
-         gender_fac = as_factor(gender)) %>%
+         sex_fac = as_factor(sex)) %>%
   
-  mutate(age = as.numeric(age))
-
-
+  mutate(age = as.numeric(age)) %>%
+  
+  # group satisfaction
+  mutate(satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "Not satisfied at all",
+                                      as.numeric(satisfaction) == 2 |
+                                        as.numeric(satisfaction) == 3 |
+                                        as.numeric(satisfaction) == 4 |
+                                        as.numeric(satisfaction) == 5  ~ "Not very satisfied",
+                                      as.numeric(satisfaction) == 6 |
+                                        as.numeric(satisfaction) == 7  |
+                                        as.numeric(satisfaction) == 8 |
+                                        as.numeric(satisfaction) == 9 ~ "Quiet satisfied",
+                                      as.numeric(satisfaction) == 10  ~ "Very satisfied")) 
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
