@@ -61,7 +61,7 @@ romania <- romania %>%
          
          marst_fac = as_factor(marst),
          
-         age_fac = as_factor(age)) %>%
+         gender_fac = as_factor(gender)) %>%
   
   mutate(age = as.numeric(age))
 
