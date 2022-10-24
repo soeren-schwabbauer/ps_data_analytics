@@ -52,8 +52,8 @@ barplot_variable <- function(var){
     geom_bar() +
     labs(x = "",
          y = "total number") +
-    geom_text(stat = "count", aes(label=..count..), vjust = -0.5) +
-    
+    geom_text(stat = "count", aes(label= paste0(..count.., " (", round(..count../nrow(romania),4)*100 , "%)")), vjust = -0.5) +
+  
     theme(
       legend.position = "none",
       axis.title.x = element_blank(),
@@ -141,8 +141,8 @@ summary(romania$feel_happy)
 # the questioned people in romania
 barplot_variable(feel_happy_fac) +
   labs(title = "Overall feeling of happiness")
-# From the barplot one can conclde, that most people (approx. 50%) are "quite happy",
-# 25% of the questioned population are "very happy" and roughly 25% are "not very happy", or 
+# From the barplot one can conclde, that most people (approx. 56%) are "quite happy",
+# one fifth of the questioned population are "very happy" and roughly the same amount of people are "not very happy", or 
 # "not at all happy"
 
 
@@ -154,12 +154,53 @@ romania$satisfaction_life_fac <- droplevels(romania$satisfaction_life_fac)
 romania$income_scale_fac <- droplevels(romania$income_scale_fac)
 romania$feel_happy_fac <- droplevels(romania$feel_happy_fac)
 
-### income (Sören) #############################################################
+### income #####################################################################
+summary(romania$income_scale)
+# The variable income was evaluated by showing the questioned household a range incomegroups 
+# within their country. The participants then had to match themself to the incomegroup.
+# The income then got scaled from 1 (the 1st decile) and 10 (the highest decile).
 
-### income distribution
-barplot_variable(income_scale_fac) +
+# The following two plots allow an insight in the income distribution of Romania
+bar_income <- barplot_variable(income_scale_fac)
+box_income <- boxplot_variable(income_scale) +
   labs(title = "Income distribution") 
-# DESCRIBE WHAT YOU SEE
+grid.arrange(box_income, bar_income, nrow = 2, heights = c(0.5,2))
+# It can be seen, that the distribution is left skewed. This indicates, that the vast 
+# majority belongs to a lower income group.
+# The boxplot shows, that 50% of the people lay in between the 3rd and the 5th decile.
+# 
+
+lorenz <- romania %>%
+  group_by(income_scale) %>%
+  summarize(n = n()) %>%
+  mutate(perc = n/sum(n),
+         cum_perc = cumsum(perc))
+
+cum_perc <- as.vector(lorenz$cum_perc)
+  
+ggplot(lorenz, aes(x = cum_perc, y = income_scale/10)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(labels = scales::percent,
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
+  
+  scale_x_continuous(labels = scales::percent,
+                     breaks = cum_perc) +
+  
+  labs(title = "Lorenz curve of Romania",
+       x = "Cumulative houshold number",
+       y = "Cululative total income (%)") +
+  
+  theme(
+    axis.text.x = element_text(angle=90, vjust = 0.4),
+    legend.position = "none",
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                      colour = "grey") ,
+
+  )
+# The Lorenz curve underlines the statement of a rather unequal distributet income.
+# For further analysis, a comparison between other countries would have to be considered.
 
 
 ### mosaic plots
@@ -171,16 +212,42 @@ inc_happy <-  romania %>%
        fill = "Scale of satisfaction") +
   theme_mosaic
   
+class(as.numeric(romania$satisfaction_life))
 inc_satis <- romania %>%
+  mutate(satisfaction_group = case_when(as.numeric(satisfaction_life) == 1  ~ "Not satisfied at all",
+                                        as.numeric(satisfaction_life) == 2 |
+                                          as.numeric(satisfaction_life) == 3 |
+                                          as.numeric(satisfaction_life) == 4 |
+                                          as.numeric(satisfaction_life) == 5  ~ "Not very satisfied",
+                                        as.numeric(satisfaction_life) == 6 |
+                                          as.numeric(satisfaction_life) == 7  |
+                                          as.numeric(satisfaction_life) == 8 |
+                                        as.numeric(satisfaction_life) == 9 ~ "Quiet satisfied",
+                                          as.numeric(satisfaction_life) == 10  ~ "Very satisfied")) %>%
   ggplot() +
-  geom_mosaic(aes(x =  product(satisfaction_life_fac, income_scale_fac), fill = satisfaction_life_fac)) +
+  geom_mosaic(aes(x =  product(satisfaction_group, income_scale_fac), fill = satisfaction_group)) +
   
   labs(title ="Comparison of satisfaction in life and income",
        fill = "Scale of satisfaction") +
   theme_mosaic
 
 grid.arrange(inc_happy, inc_satis, nrow = 1)
-### Conclusion: 
+### The two mosaic plots allow a bivariate exploratory analysis among the variables
+# income and happiness, as well as income and satisfaction.
+# The comparison between income and satisfaction in life shows, that the group with the lowest income 
+# is the group with the second highest "very happy" people. However the people in the 2nd decile are.
+# Grouping the happiness variable and saying, that "quite happy" and "very happy"
+# can be grouped, the lower three deciles make up the lowest share. 
+# This picture is opposite, if one looks at the top 30% of the income scale. Among theses groups
+# almost everybody ist at least "quiet happy". 
+
+# For a better overview, we grouped the levels of satisfaction into 1 = "Not satisfied at all,
+# 2-5 = "not very satisfied", 6-9 = "quiet satisfied" and 10  = very satisfied.
+# Comparing the satisfaction and the income, the group with the lowest income, again has one 
+# of the highest rates of satisfaction. Tough it should also be mentioned, that they also share
+# one of the highest rates of Dissatisfaction. Once again it shows, that a higher income
+# rules out the chance of being "not satisfied at all". At the same time, the top 10% income
+# group accounts for the lowest amount of very satisfied people. 
 
 
 ### health #####################################################################
