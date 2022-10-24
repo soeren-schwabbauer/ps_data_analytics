@@ -6,7 +6,6 @@ rm(list = ls())
 ################################################################################
 
 # load libraries
-library(stringr)
 library(dplyr)
 library(readxl)
 library(haven)
@@ -56,11 +55,12 @@ romania <- romania %>%
          
          feel_happy_fac = as_factor(feel_happy),
 
-         income_scale_fac = as_factor(income_scale))
+         income_scale_fac = as_factor(income_scale),
+         
+         health_fac = as_factor(health),
+         
+         marst_fac = as_factor(marst))
 
-
-
-  
 
 
 ##### save file
