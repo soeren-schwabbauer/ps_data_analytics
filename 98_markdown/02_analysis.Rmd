@@ -1,6 +1,6 @@
 ---
-title: "02_analysis"
-author: "Soeren Schwabbauer"
+title: "Task 1 - Proseminar Data Analytics - Group: Romania"
+author: "Sören Schwabbauer, David Hollenstein, Alexander Hanser, Jürgen Bildstein"
 date: "2022-10-25"
 output: html_document
 ---
@@ -10,13 +10,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r pressure, echo=TRUE}
+```{r , echo=TRUE, out.width="100%"}
 rm(list = ls())
 ################################################################################
-# Course: Data Analytics - PS
-# Date: 13.10.2022
-# Purpose: 1) explore main variables
-#          2) compare main variables to other variables
+# The following script shall provide an overview of the the dataframe from the European Values Study. In the following we are going to provide an overview of the key variables Happiness and life satisfaction, which we see as key indicators of the subjective well-being. In addition to that, we provide several bivariate analysis, which compares the two variables with other observed variables.
 ################################################################################
 
 # load libraries
@@ -29,6 +26,7 @@ library(gridExtra)
 library(ggmosaic)
 
 # load df
+# We decided to share our dataframe in a Google Drive Folder. Therefore, we used different filepaths.
 if (dir.exists("G:/Geteilte Ablagen/")) {
   
   INPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/INPUT/"
@@ -55,12 +53,13 @@ mosaic_theme <-   theme(
   #legend.position = "none",
   axis.title.x = element_blank(),
   axis.title.y = element_blank(),
-  axis.text.x = element_text(angle=90),
+  axis.text.x = element_text(angle=90, size = 7),
+  axis.text.y = element_text(size = 7),
   panel.background = element_rect(fill = "white"),
   panel.grid.major.y = element_line(size = 0, linetype = 'solid',
                                     colour = "white") ,
   legend.position = "none",
-  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+  plot.title = element_text(color="black", size= 8, face="bold.italic", vjust = 0.5)
 ) 
 
   
@@ -72,7 +71,7 @@ barplot_var <- function(var){
     geom_bar() +
     labs(x = "",
          y = "total number") +
-    geom_text(stat = "count", aes(label= paste0(..count.., " (", round(..count../nrow(romania),4)*100 , "%)")), vjust = -0.5) +
+    geom_text(stat = "count", aes(label= paste0(..count.., " (", round(..count../nrow(romania),4)*100 , "%)")), vjust = -0.5, size = 3) +
   
     theme(
       legend.position = "none",
@@ -113,7 +112,7 @@ boxplot_age <- function(var1, var2, var3){
     
     theme(
       axis.title.x = element_blank(),
-      #axis.text.x = element_blank(),
+      axis.text.x = element_text(angle=90),
       axis.ticks.x = element_blank(),
       #axis.title.y = element_blank(),
       #axis.text.y = element_blank(),
@@ -128,3 +127,248 @@ boxplot_age <- function(var1, var2, var3){
 }
 ```
 
+
+## 1. explore main variables (univariate analysis)
+
+### 1.1 A170 satisfaction in life
+```{r , echo=TRUE, out.width="100%"}
+# summary for quick overview
+summary(romania$satisfaction)
+# The summary command allows us to have a rough overview of the variable A170 - satisfaction in life. The variable is scaled from 1 to 10, with 10 being the highest level of satisfaction. Since one can rank the level of satisfaction (e.g: a level of 8 being higher ranked than a level 2), but the distance between the levels is subjective (e.g: a person on a level 8 is not necessarily twice as happy as a person on the level 4) Life satisfaction can be considered an ordinarily scaled variable. 
+
+# The summary command shows, that everybody has replied to to questions (no NA's). Another conclusion which can be drawn from the summary command is the average level of satisfaction. With a median level of 8, and a mean of 7.5, the Romanian people are generally not extremely satisfied, but also not unsatisfied with their life as a whole. In addition to that, it can be seen, that the half of the asked population ranks themselves between a 6 and a 9.
+
+# The following plot allows a look at the distribution of satisfaction
+bar_satiscation <- barplot_var(satisfaction_fac) 
+
+box_satiscation <- boxplot_for_barplot(satisfaction) +
+  labs(title = "Overall life satisfaction") 
+
+grid.arrange(box_satiscation, bar_satiscation, nrow = 2, heights = c(0.5,2))
+#The barplot on the distribution of satisfaction in life adds additional information to the summary command. As one can see, most people can identify with the highest level "satisfied" . It remains unclear, why there is such a rapid drop one level below. Furthermore it can be seen, that the lower 25% are much more distributed (from 2 to 5), whereas "Satisfied" contains all the upper 25% of the counts. 
+```
+
+### 1.2 A008 Feeling of happiness
+```{r , echo=TRUE, out.width="100%"}
+# summary for quick overview
+summary(romania$happy)
+# Also the variable happy only contains interpretable values. Neither has nobody not answered, nor has the question being skipped, or other other problems occurred. The variable is scaled from 1 to 4. 1 indicates "very happy", 4 indicates "not at all happy". Identical to satisfaction, the feeling of happiness counts as a originally scaled variable.
+
+# The following barplot allows a closer look at the distribution of happiness within # the questioned people in Romania
+barplot_var(happy_fac) +
+  labs(title = "Overall feeling of happiness")
+# From the barplot one can conclude, that most people (approx. 56%) are "quite happy", one fifth of the questioned population are "very happy" and roughly the same amount of people are "not very happy", or "not at all happy"
+
+
+```
+
+
+# 2. multivariate analysis
+```{r , echo=TRUE, out.width="100%"}
+
+# In the following section we are going to provide a comparison of the two key variables with other variables. 
+
+```
+
+### 2.1 income
+```{r , echo=TRUE, out.width="100%"}
+summary(romania$income_scale)
+# The variable income was evaluated by showing the questioned households a range of income groups within their country, of which the participants had to select one. The income then got scaled from 1 (the 1st decile) and 10 (the highest decile).
+
+# The following two plots allow an insight in the income distribution of Romania
+bar_income <- barplot_var(income_scale_fac) +
+    theme(axis.text.x = element_text(angle=90))
+
+box_income <- boxplot_for_barplot(income_scale) +
+  labs(title = "Income distribution") 
+
+grid.arrange(box_income, bar_income, nrow = 2, heights = c(0.5,2))
+# It can be seen, that the distribution is right skewed. This indicates, that the vast majority belongs to a lower income group. The boxplot shows, that 50% of the people lay in between the 3rd and the 5th decile.
+
+lorenz <- romania %>%
+  group_by(income_scale) %>%
+  summarize(n = n()) %>%
+  mutate(perc = n/sum(n),
+         cum_perc = cumsum(perc))
+
+cum_perc <- as.vector(lorenz$cum_perc)
+  
+ggplot(lorenz, aes(x = cum_perc, y = income_scale/10)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(labels = scales::percent,
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
+  
+  scale_x_continuous(labels = scales::percent,
+                     breaks = cum_perc) +
+  
+  labs(title = "Lorenz curve of Romania",
+       x = "Cumulative houshold number (%)",
+       y = "Cululative total income (%)") +
+  
+  theme(
+    axis.text.x = element_text(angle=90, vjust = 0.4),
+    legend.position = "none",
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                      colour = "grey") ,
+    plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+
+  )
+# The Lorenz curve underlines the statement of a rather unequal distributed income. For further analysis, a comparison between other countries should be considered.
+
+
+# The following mosaic plots shall provide an overview of the two main variables and the scaled income.
+inc_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, income_scale_fac), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life and income",
+       fill = "Scale of happiness") +
+  mosaic_theme
+  
+inc_satis <- romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, income_scale_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life and income",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+
+grid.arrange(inc_happy, inc_satis, nrow = 1)
+# The two mosaic plots allow a bivariate exploratory analysis among the variables income and happiness, as well as income and satisfaction. The comparison between income and satisfaction in life shows, that the group with the lowest income is the group has more "very happy" people, than the following 3 decile's. However by grouping "quite happy" and "very happy" into one category, as suggested by the second decile, it can then be seen that the lower three deciles make up for the lowest share. When analyzing the top 30% of income earners, we can see that almost everybody is at least "quite happy". Also worth noting is that the top decile group of earners has less "very happy" people as decile group 7,8 & 9.
+
+# For a better overview, we grouped the levels of satisfaction into 1 = "Not satisfied at all, 2-5 = "not very satisfied", 6-9 = "quiet satisfied" and 10  = very satisfied.Comparing the satisfaction and the income, the group with the lowest income, again has one of the highest rates of satisfaction. Tough it should also be mentioned, that they also share one of the highest rates of Dissatisfaction. Once again it shows, that a higher income rules out the chance of being "not satisfied at all". At the same time, the top 10% income group accounts for the lowest amount of very satisfied people. 
+
+
+```
+
+### 2.2 health
+```{r , echo=TRUE, out.width="100%"}
+bar_health <- barplot_var(health_fac) 
+
+box_health <- boxplot_for_barplot(health) +
+  labs(title = "Health distribution")
+
+grid.arrange(box_health, bar_health, nrow = 2, heights = c(0.5,2))
+# The average citizen seems to be in rather good health condition. Most of the answers group around the "good" health answer. The second most frequent answer is the "fair" health response. A very small percentage of respondents report being of "poor" or "very poor" health. 
+median(romania$health)
+# This is supported by the median value of the "health" variable which confirms, that the average citizen is of Good health
+
+### health mosaic plots
+health_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, health_fac), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life and health",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+health_satis <- romania %>%
+  
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, health_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life and health",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+grid.arrange(health_happy, health_satis, nrow = 1)
+
+# These graphs show a connection between health of an individual and the satisfaction with life and overall happiness. Looking at happiness in life first, what stands out is, that those with poor and very poor health are to a large extent not very happy. This also translates to overall life satisfaction. Those with poor health are to a large extent not very satisfied. The opposite to this observation also holds true. Those with good and very good health are to a very large extent either very happy or quite happy. Respectively, those with good and very good health are also quite satisfied and very satisfied.
+
+```
+
+### 2.3 age
+```{r , echo=TRUE, out.width="100%"}
+ 
+ ##overall overview
+summary(romania$age)
+# The summary command tells us the mean and the median age. Bothe are around 50. With the mean and the median age laying close together, one can say, that  the distribution is rater equal. Since the age scaling end at the age of 82, one can not say, how old the oldest person in the dataframe is. The youngest however is at the age of 19.
+
+boxplot_happy <- boxplot_age(happy_fac, age, sex_fac) +
+  labs(title = "Range of age for the level of happiness",
+       fill = "age") 
+
+boxplot_satisfaction <- boxplot_age(satisfaction_fac, age, 0) +
+  labs(title = "Range of age by satisfaction") +
+  theme(legend.position = "none")
+
+
+grid.arrange(boxplot_happy, boxplot_satisfaction, nrow = 1)
+# The boxplots show the distribution of age within the different levels of happiness and satisfaction. On the left graph it can be seen, that the median age increases, the less satisfied a person is. In the left graph it can be seen, that people who are "not happy at all" tend to be much older by median, than people who are very happy. For a less biased picture, we decided to split the level of happiness into male and female. It can be seen, that this does not make so big of a difference. However, a switch in the median age is observable, the less happy a person gets. The right boxplot shows that people with a satisfaction-level of 1 and 2 are almost solely over the age of 50. We can also note, that with satisfaction-levels of 3 and 4, the age is also quite high except for the lower 25 percentile in age and the lower outliers. Quite striking are the variances in the satisfaction-levels from 5 to 10, which span the whole age spectrum, although in general we can say that the higher the satisfaction-level the lower the median age
+
+```
+
+### 2.4 marital status
+```{r , echo=TRUE, out.width="100%"}
+barplot_var(marst_fac) +
+  labs(title = "Marriage distribution")
+# Since it is not possible, to put the marital status in some kind of hierarchy, it can be considered a nominal scaled variable. The graph shows the distribution of people regarding their legal marital status. It can be seen, that the wide majority (60%) is married. The second and third highest population is formed by people who are single or have never been married (19%), and people who are widowed (15%).
+
+# The following mosaic plots are an attempt of a causal link between the marriage status, happiness and life satisfaction 
+romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, marst_fac), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life and marital status",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+# It can be seen, that the widowed people are generally the ones who are rather not, or not happy at all. The single and married people are generally the biggest peopulation of people who are "very happy". 
+
+romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, marst_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life and marital status",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+# The distribution of "very satisified" people is quiet similar to the one seen in the previous plot. The same counts for the "not very" or "not satisfied at all", with widowed people making up the largest population.
+
+
+
+```
+
+### 2.5 additional variables
+```{r , echo=TRUE, out.width="100%"}
+romania$member_religion_fac <- as_factor(romania$member_religion)
+romania$member_activity_fac <- as_factor(romania$member_activity)
+
+activity_fun <- function(var, var_char){
+  romania %>% select(happy, {{var}}) %>% rename(member = {{var}}) %>% mutate(cat = {{var_char}})
+}
+
+bind_rows( activity_fun(member_activity, "an activity"),
+           activity_fun(member_religion, "a religion"),
+           activity_fun(member_selfhelp, "a selfhelp group"),
+           activity_fun(member_charity, "a charity"),
+           activity_fun(member_labor_union, "a labor union")) %>%
+  
+  group_by(member, cat, happy) %>%
+  summarize(n = n()) %>%
+  mutate(perc = n/sum(n)) %>%
+  
+  ggplot(aes(x = as_factor(member), y = perc, fill = as_factor(happy))) +
+  geom_bar(stat = "identity") +
+  labs(fill = "Level of Happiness",
+       y = "Distribution (%)",
+       title = "Member of ...") +
+  
+  theme(
+    axis.title.x = element_blank(),
+    axis.text.x = element_text(angle=90),
+    #axis.title.y = element_blank(),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                      colour = "grey") ,
+    plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
+    
+  ) +
+  
+  scale_y_continuous(labels = scales::percent,
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
+  
+  facet_grid( ~ cat) 
+  
+# These additional variables also allow a little bit of insight into the data. Starting off with charitable causes we can see that those who mentioned being a member of a charitable organisation reported to be quite happy or very happy more often. Being a member of a labor union also seems to have a certain connection to happiness as union members more often reported to be quite or very happy as opposed to non-members. Interestingly, being a member of a religious organisation doesn't seem to increase happiness for all participants. It can be observed that those who are religious more often reported to be not very happy but at the same time religious respondents more often reported to be very happy. One way of interpreting this would be to assume that being religious could have a diverging effect on people and either increase or decrease their happiness according to some other external variable. Looking at the variable of being a member of a self-help group, the graphs don't diverge as much as for other variables. Those who are members of a self-help group have a little more frequently reported to be quite happy than those who are not, but the effect is very small. Finally, being a member of an activity. This seems to be connected to the effect of happiness as those who have reported to be member of any sort of activity rarely mentioned to be not very happy or not at all happy. Over 90% of respondents who mentioned to be member of an activity reported to be either very or at least quite happy.
+```
