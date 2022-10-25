@@ -447,6 +447,34 @@ bind_rows( activity_fun(member_activity, "Member of an activity"),
                      breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
   
   facet_grid( ~ cat) 
-  
+
+# Interpretation
+# These additional variables also allow a little bit of insight into the data.
+# Starting off with charitable causes we can see that those who mentioned being 
+# a member of a charitable organisation reported to be quite happy or very happy 
+# more often.
+#
+# Being a member of a labor union also seems to have a certain connection to
+# happiness as union members more often reported to be quite or very happy as 
+# opposed to non-members.
+#
+# Interestingly, being a member of a religious organisation doesn't seem to 
+# increase happiness for all participants. It can be observed that those who are
+# religious more often reported to be not very happy but at the same time 
+# religious respondents more often reported to be very happy. One way of 
+# interpreting this would be to assume that being religious could have a diverging
+# effect on people and either increase or decrease their happiness according to 
+# some other external variable.
+#
+# Looking at the variable of being a member of a self-help group, the graphs don't
+# diverge as much as for other variables. Those who are members of a self-help
+# group have a little more frequently reported to be quite happy than those who are
+# not, but the effect is very small.
+#
+# Finally, being a member of an activity. This seems to be connected to the effect
+# of happiness as those who have reported to be member of any sort of activity 
+# rarely mentioned to be not very happy or not at all happy. Over 90% of respondents
+# who mentioned to be member of an activity reported to be either very or at least
+# quite happy.
 
 
