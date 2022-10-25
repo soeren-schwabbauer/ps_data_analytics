@@ -299,7 +299,15 @@ health_satis <- romania %>%
 grid.arrange(health_happy, health_satis, nrow = 1)
 
 # INTERPRETATION
-
+# These graphs show a connection between health of an individual and the satisfaction
+# with life and overall happiness. Looking at happiness in life first, what stands
+# out is, that those with poor and very poor health are to a large extent not very
+# happy. This also translates to overall life satisfaction. Those with poor health 
+# are to a large extent not very satisfied.
+#
+# The opposite to this observation also holds true. Those with good and very good
+# health are to a very large extent either very happy or quite happy. Respectively,
+# those with good and very good health are also quite satisfied and very satisfied.
 
 ### age ########################################################################
  
