@@ -34,6 +34,9 @@ if (dir.exists("G:/Geteilte Ablagen/")) {
 # load dataframe
 load(paste0(INPUT, "Romania.rda"))
 
+
+##### define themes and create functions for plotting ##########################
+
 # define theme for mosaic ######################################################
 mosaic_theme <-   theme( 
   #legend.position = "none",
@@ -167,14 +170,12 @@ barplot_var(happy_fac) +
 
 ################################################################################
 ###### 2. MULTIVARIATE ANALYSIS ################################################
-# comparing two quantitative variables by mosaic plot
+# drop empty levels. otherwise one gets problems with ggmosaic
 romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
 romania$income_scale_fac <- droplevels(romania$income_scale_fac)
 romania$happy_fac <- droplevels(romania$happy_fac)
 romania$marst_fac <- droplevels(romania$marst_fac)
-
 romania$health_fac <- droplevels(romania$health_fac)
-
 romania$sex <-  droplevels(romania$sex_fac)
 
 ### income #####################################################################
@@ -304,7 +305,7 @@ grid.arrange(health_happy, health_satis, nrow = 1)
 ### age ########################################################################
  
  ##overall overview
-summary(romania$age
+summary(romania$age)
 # The summary command tells us the mean and the median age. Bothe are around 50.
 # With the mean and the median age laying close together, one can say, that 
 # the distribution is rater equal. 
@@ -406,12 +407,13 @@ romania$member_activity_fac <- as_factor(romania$member_activity)
 activity_fun <- function(var, var_char){
   romania %>% select(happy, {{var}}) %>% rename(member = {{var}}) %>% mutate(cat = {{var_char}})
 }
-romania$member_selfhelp
+romania$just_casualsex
 
 bind_rows( activity_fun(member_activity, "Member of an activity"),
            activity_fun(member_religion, "Member of a religion"),
            activity_fun(member_selfhelp, "Member of a selfhelp group"),
-           activity_fun(member_charity, "Member of a charity")) %>%
+           activity_fun(member_charity, "Member of a charity"),
+           activity_fun(member_labor_union, "Member of a labor union")) %>%
   
   group_by(member, cat, happy) %>%
   summarize(n = n()) %>%
@@ -419,7 +421,24 @@ bind_rows( activity_fun(member_activity, "Member of an activity"),
   
   ggplot(aes(x = as_factor(member), y = perc, fill = as_factor(happy))) +
   geom_bar(stat = "identity") +
-  labs(fill="Level of Happiness") +
+  labs(fill = "Level of Happiness",
+       y = "Distribution (%)") +
+  
+  theme(
+    axis.title.x = element_blank(),
+    #axis.title.y = element_blank(),
+    #axis.text.x = element_text(angle=90),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                      colour = "grey") ,
+    plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
+    
+  ) +
+  
+  scale_y_continuous(labels = scales::percent,
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
   
   facet_grid( ~ cat) 
+  
+
 
