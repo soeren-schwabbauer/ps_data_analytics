@@ -159,7 +159,7 @@ summary(romania$happy)
 # the questioned people in romania
 barplot_var(happy_fac) +
   labs(title = "Overall feeling of happiness")
-# From the barplot one can conclde, that most people (approx. 56%) are "quite happy",
+# From the barplot one can conclude, that most people (approx. 56%) are "quite happy",
 # one fifth of the questioned population are "very happy" and roughly the same amount of people are "not very happy", or 
 # "not at all happy"
 
@@ -172,6 +172,10 @@ romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
 romania$income_scale_fac <- droplevels(romania$income_scale_fac)
 romania$happy_fac <- droplevels(romania$happy_fac)
 romania$marst_fac <- droplevels(romania$marst_fac)
+
+romania$health_fac <- droplevels(romania$health_fac)
+
+romania$sex <-  droplevels(romania$sex_fac)
 
 ### income #####################################################################
 summary(romania$income_scale)
@@ -228,7 +232,7 @@ inc_happy <-  romania %>%
   geom_mosaic(aes(x =  product(happy_fac, income_scale_fac), fill = happy_fac)) +
   
   labs(title ="Comparison of happiness in life and income",
-       fill = "Scale of satisfaction") +
+       fill = "Scale of happiness") +
   mosaic_theme
   
 inc_satis <- romania %>%
@@ -274,12 +278,33 @@ median(romania$health)
 #This is supported by the median value of the "health" variable which confirms,
 #that the average citizen is of Good health
 
+### health mosaic plots
+health_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, health_fac), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life and health",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+health_satis <- romania %>%
+  
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, health_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life and health",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+grid.arrange(health_happy, health_satis, nrow = 1)
+
+# INTERPRETATION
+
 
 ### age ########################################################################
  
  ##overall overview
-summary(romania$age)
-sd(romania$age)
+summary(romania$age
 # The summary command tells us the mean and the median age. Bothe are around 50.
 # With the mean and the median age laying close together, one can say, that 
 # the distribution is rater equal. 
@@ -320,10 +345,20 @@ hist(female$age)
 hist(male$age)
 mean(male$age)
 mean(female$age)
+
+#Failed attempt at an age pyramid######################################################
+#romania %>%
+#ggplot(aes(x=(romania$sex_fac),fill=sex_fac)) + 
+#  geom_bar(data=subset(romania,sex_fac=="FEMALE")) + 
+#  geom_bar(data=subset(romania,sex_fac=="MALE"),aes(y=..count..*(-1))) + 
+#  scale_y_continuous(breaks=seq(-40,40,10),labels=abs(seq(-40,40,10))) + 
+#  coord_flip()
+#######################################################################################
+
  #The visualisation of age distribution overall and separated by sex supports
  #the insight, that there is no significant difference or trend in age distribution.
 
-### 
+
 
 
 ### marital status #############################################################
@@ -362,5 +397,29 @@ romania %>%
 # people making up the largest population.
 
 
+
+
 ### additional variables #######################################################
+romania$member_religion_fac <- as_factor(romania$member_religion)
+romania$member_activity_fac <- as_factor(romania$member_activity)
+
+activity_fun <- function(var, var_char){
+  romania %>% select(happy, {{var}}) %>% rename(member = {{var}}) %>% mutate(cat = {{var_char}})
+}
+romania$member_selfhelp
+
+bind_rows( activity_fun(member_activity, "Member of an activity"),
+           activity_fun(member_religion, "Member of a religion"),
+           activity_fun(member_selfhelp, "Member of a selfhelp group"),
+           activity_fun(member_charity, "Member of a charity")) %>%
+  
+  group_by(member, cat, happy) %>%
+  summarize(n = n()) %>%
+  mutate(perc = n/sum(n)) %>%
+  
+  ggplot(aes(x = as_factor(member), y = perc, fill = as_factor(happy))) +
+  geom_bar(stat = "identity") +
+  labs(fill="Level of Happiness") +
+  
+  facet_grid( ~ cat) 
 
