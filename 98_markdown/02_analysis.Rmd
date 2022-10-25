@@ -1,0 +1,130 @@
+---
+title: "02_analysis"
+author: "Soeren Schwabbauer"
+date: "2022-10-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r pressure, echo=TRUE}
+rm(list = ls())
+################################################################################
+# Course: Data Analytics - PS
+# Date: 13.10.2022
+# Purpose: 1) explore main variables
+#          2) compare main variables to other variables
+################################################################################
+
+# load libraries
+library(dplyr)
+library(haven)
+library(ggplot2)
+library(ggmosaic)
+library(lazyeval)
+library(gridExtra)
+library(ggmosaic)
+
+# load df
+if (dir.exists("G:/Geteilte Ablagen/")) {
+  
+  INPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/INPUT/"
+  OUTPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/OUTPUT/"
+  CODEBOOK = "G:/Geteilte Ablagen/data_analytics/"
+  
+} else if (dir.exists("G:/Shared drives/")) {
+  
+  
+  INPUT = "G:/Shared drives/data_analytics/02_analysis/INPUT/"
+  OUTPUT = "G:/Shared drives/data_analytics/02_analysis/OUTPUT/"
+  CODEBOOK = "G:/Shared drives/data_analytics/"
+  
+}
+
+# load dataframe
+load(paste0(INPUT, "Romania.rda"))
+
+
+##### define themes and create functions for plotting ##########################
+
+# define theme for mosaic ######################################################
+mosaic_theme <-   theme( 
+  #legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  axis.text.x = element_text(angle=90),
+  panel.background = element_rect(fill = "white"),
+  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                    colour = "white") ,
+  legend.position = "none",
+  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+) 
+
+  
+# define function, incl. theme for barplots ####################################
+
+barplot_var <- function(var){
+  romania %>%
+    ggplot(aes(x= {{var}}, y= ..count.. , fill = {{var}})) +
+    geom_bar() +
+    labs(x = "",
+         y = "total number") +
+    geom_text(stat = "count", aes(label= paste0(..count.., " (", round(..count../nrow(romania),4)*100 , "%)")), vjust = -0.5) +
+  
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      panel.background = element_rect(fill = "white"),
+      panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "grey") ,
+      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+      
+    )
+}
+
+
+boxplot_for_barplot <- function(var){
+  romania %>%
+    ggplot(aes(y = as.numeric({{var}}))) +
+    geom_boxplot(width = 0.5) +
+    coord_flip() +
+    
+    theme(
+      axis.title.x = element_blank(),
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      panel.background = element_rect(fill = "white"),
+      panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "white"),
+      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+    ) 
+}
+
+boxplot_age <- function(var1, var2, var3){
+  romania %>% 
+    ggplot(aes(x = {{var1}}, y = {{var2}})) +
+    geom_boxplot(aes(fill = {{var3}})) +
+    
+    theme(
+      axis.title.x = element_blank(),
+      #axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      #axis.title.y = element_blank(),
+      #axis.text.y = element_blank(),
+      #axis.ticks.y = element_blank(),
+      panel.background = element_rect(fill = "white"),
+      panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "grey"),
+      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+      
+    ) +
+    scale_y_continuous(breaks = c(10, 20, 30, 40, 50, 60, 70, 80))
+}
+```
+
