@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Soeren Schwabbauer" />
+<meta name="author" content="Sören Schwabbauer, David Hollenstein, Alexander Hanser, Jürgen Bildstein" />
 
 <meta name="date" content="2022-10-25" />
 
-<title>group project</title>
+<title>01 Data Build</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -363,8 +363,9 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">group project</h1>
-<h4 class="author">Soeren Schwabbauer</h4>
+<h1 class="title toc-ignore">01 Data Build</h1>
+<h4 class="author">Sören Schwabbauer, David Hollenstein, Alexander
+Hanser, Jürgen Bildstein</h4>
 <h4 class="date">2022-10-25</h4>
 
 </div>
@@ -425,19 +426,24 @@ variable &lt;- codebook %&gt;% pull(variable)
 romania &lt;- data %&gt;%
   
   rename_at(vars(paste0(var_id, &quot;&quot;)), function(x) variable)  # rename variables
+# A003 doesn&#39;t exist in df
 
-# do formatting, create new variables
+
+# mutate new variables to factor
 romania &lt;- romania %&gt;%
   
-  # mutate new variables to factor 
   mutate(satisfaction_fac = as_factor(satisfaction),
+         
          happy_fac = as_factor(happy),
+
          income_scale_fac = as_factor(income_scale),
+         
          health_fac = as_factor(health),
+         
          marst_fac = as_factor(marst),
+         
          sex_fac = as_factor(sex)) %&gt;%
   
-  # mutate new variables to numeric 
   mutate(age = as.numeric(age)) %&gt;%
   
   # group satisfaction
@@ -451,6 +457,14 @@ romania &lt;- romania %&gt;%
                                         as.numeric(satisfaction) == 8 |
                                         as.numeric(satisfaction) == 9 ~ &quot;Quiet satisfied&quot;,
                                       as.numeric(satisfaction) == 10  ~ &quot;Very satisfied&quot;)) 
+
+romania$satisfaction_fac &lt;- droplevels(romania$satisfaction_fac)
+romania$income_scale_fac &lt;- droplevels(romania$income_scale_fac)
+romania$happy_fac &lt;- droplevels(romania$happy_fac)
+romania$marst_fac &lt;- droplevels(romania$marst_fac)
+romania$health_fac &lt;- droplevels(romania$health_fac)
+romania$sex &lt;-  droplevels(romania$sex_fac)
+
 
 ##### save file
 save(romania, file = paste0(OUTPUT, &quot;romania.rda&quot;))</code></pre>

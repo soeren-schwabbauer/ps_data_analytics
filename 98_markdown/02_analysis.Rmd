@@ -24,6 +24,7 @@ library(ggmosaic)
 library(lazyeval)
 library(gridExtra)
 library(ggmosaic)
+library(lemon)
 
 # load df
 # We decided to share our dataframe in a Google Drive Folder. Therefore, we used different filepaths.
@@ -126,7 +127,9 @@ boxplot_age <- function(var1, var2, var3){
     scale_y_continuous(breaks = c(10, 20, 30, 40, 50, 60, 70, 80))
 }
 ```
-
+```{r , echo=TRUE, out.width="100%"}
+# The following script shall provide an overview of the the dataframe from the European Values Study. In the following we are going to provide an overview of the key variables Happiness and life satisfaction, which we see as key indicators of the subjective well-being. In addition to that, we provide several bivariate analysis, which compares the two variables with other observed variables.
+```
 
 ## 1. explore main variables (univariate analysis)
 
@@ -285,6 +288,31 @@ grid.arrange(health_happy, health_satis, nrow = 1)
  ##overall overview
 summary(romania$age)
 # The summary command tells us the mean and the median age. Bothe are around 50. With the mean and the median age laying close together, one can say, that  the distribution is rater equal. Since the age scaling end at the age of 82, one can not say, how old the oldest person in the dataframe is. The youngest however is at the age of 19.
+
+# In order to get a brief overview of the age distribution, a population pyramid can help.
+romania %>% 
+  group_by(age, sex_fac) %>%
+  summarize(n = n()) %>% 
+  mutate(age = as.character(age),
+         sex = as.character(sex_fac),
+         n = as.integer(n)) %>%
+
+  ggplot( mapping = aes(x = ifelse(test = sex_fac == "Male", yes = -n, no = n), 
+                     y = age, fill = sex)) +
+  geom_col() +
+  scale_x_symmetric(labels = abs) +
+  labs(x = "Population ",
+       title = "Age distribution in the sample") +
+  scale_y_discrete(breaks = c(19, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 82)) +
+  
+  theme(
+    plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                      colour = "grey") 
+  )
+
+# The visualisation of age distribution separated by sex supports the insight, that there is no significant difference or trend in age distribution.
 
 boxplot_happy <- boxplot_age(happy_fac, age, sex_fac) +
   labs(title = "Range of age for the level of happiness",
