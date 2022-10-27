@@ -77,6 +77,14 @@ romania <- romania %>%
                                         as.numeric(satisfaction) == 9 ~ "Quiet satisfied",
                                       as.numeric(satisfaction) == 10  ~ "Very satisfied")) 
 
+romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
+romania$income_scale_fac <- droplevels(romania$income_scale_fac)
+romania$happy_fac <- droplevels(romania$happy_fac)
+romania$marst_fac <- droplevels(romania$marst_fac)
+romania$health_fac <- droplevels(romania$health_fac)
+romania$sex <-  droplevels(romania$sex_fac)
+
+
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
 
