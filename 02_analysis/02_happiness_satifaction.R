@@ -478,3 +478,27 @@ bind_rows( activity_fun(member_activity, "Member of an activity"),
 # quite happy.
 
 
+library(lemon)
+test <- romania %>% 
+  group_by(age, sex_fac) %>%
+  summarize(n = n()) %>% 
+  mutate(age = as.character(age),
+         sex = as.character(sex_fac),
+         n = as.integer(n)) %>%
+
+  ggplot( mapping = aes(x = ifelse(test = sex_fac == "Male", yes = -n, no = n), 
+                     y = age, fill = sex)) +
+  geom_col() +
+  scale_x_symmetric(labels = abs) +
+  labs(x = "Population ",
+       title = "Age distribution in the sample") +
+  scale_y_discrete(breaks = c(19, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 82)) +
+  
+  theme(
+    plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                      colour = "grey") 
+  )
+
+
