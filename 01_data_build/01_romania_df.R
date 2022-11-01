@@ -61,7 +61,9 @@ romania <- romania %>%
          
          marst_fac = as_factor(marst),
          
-         sex_fac = as_factor(sex)) %>%
+         sex_fac = as_factor(sex),
+         
+         trust_fac = as_factor(trust)) %>%
   
   mutate(age = as.numeric(age)) %>%
   
@@ -83,7 +85,7 @@ romania$happy_fac <- droplevels(romania$happy_fac)
 romania$marst_fac <- droplevels(romania$marst_fac)
 romania$health_fac <- droplevels(romania$health_fac)
 romania$sex <-  droplevels(romania$sex_fac)
-
+romania$trust_fac <- droplevels(romania$trust_fac)
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
