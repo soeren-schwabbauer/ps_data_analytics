@@ -12,7 +12,9 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 library(webr)
-library(Hmisc)
+library(patchwork)
+library(reshape2)
+
 
 # load df
 if (dir.exists("G:/Geteilte Ablagen/")) {
@@ -35,6 +37,55 @@ load(paste0(INPUT, "Romania.rda"))
 
 
 ##### define themes and create functions for plotting ##########################
+
+### function + plot for general membership
+ties_var_summary <- function(var, var_char){
+  romania %>% select({{var}},contains("member_")) %>% rename(member = {{var}}) %>% melt() %>%
+    group_by(value, member) %>%
+    summarise(n = n()) %>%
+    mutate(prop = n/sum(n)) %>%
+    
+    mutate(value = replace(value, value == 1, "member"),
+           value = replace(value, value == 0, "no member"),
+           value = as_factor(value)) %>%
+    
+    ggplot(aes(x = (value), y = prop, fill = as_factor(member))) +
+    geom_bar(stat = "identity") +
+    labs(y = "Distribution (%)") + 
+    theme(
+      axis.title.x = element_blank(),
+      axis.text.x = element_text(angle=0),
+      #axis.title.y = element_blank(),
+      panel.background = element_rect(fill = "white"),
+      panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                        colour = "grey") ,
+      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
+      
+    ) +
+    
+    scale_y_continuous(labels = scales::percent,
+                       breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) 
+}
+
+### function for each membership & type of neighbor + theme for the plots
+fun_happy <- function(cat, var, var_char){
+  romania %>% select({{cat}}, {{var}}) %>% rename(member = {{var}}) %>% mutate(cat = {{var_char}}) %>%
+    
+    mutate(member = as.character(as_factor(member)),
+           member = replace(member, member == "Mentioned", "yes"),
+           member = replace(member, member == "Not mentioned", "no"))
+}
+
+theme_cat <-   theme(
+  axis.title.x = element_blank(),
+  axis.text.x = element_text(angle=0),
+  #axis.title.y = element_blank(),
+  panel.background = element_rect(fill = "white"),
+  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                    colour = "grey") ,
+  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
+) 
+  
 
 
 
@@ -59,7 +110,6 @@ trust_summary <- romania %>%
   group_by(trust_fac) %>%
   summarise(n = n()) %>%
   mutate(prop = round(n/sum(n)*100,2))
-trust_table <- (trust_summary)
 
 trust_plot <- trust_summary %>%
   
@@ -99,11 +149,11 @@ bind_rows(trust_var_summary(happy_fac, "Happiness"),
   summarise(n = n()) %>%
   mutate(prop = n/sum(n)) %>%
 
-  ggplot(aes(x = droplevels(member), y = prop, fill = as_factor(trust_fac))) +
+  ggplot(aes(x = as_factor(member), y = prop, fill = as_factor(trust_fac))) +
   geom_bar(stat = "identity") +
-  labs(fill = "Dimensions of trust",
+  labs(fill = "Levels of trust",
        y = "Distribution (%)",
-       title = "Variables for SWB") + 
+       title = "Impact of the level of trust on happiness and satisfaction") + 
   theme(
     axis.title.x = element_blank(),
     axis.text.x = element_text(angle=90),
@@ -120,3 +170,70 @@ bind_rows(trust_var_summary(happy_fac, "Happiness"),
   
   facet_grid( ~ cat, scales="free_x") 
 
+# BITTE INTERPRETIEREN
+
+
+# Besides the trust factor, analyzing "weak ties" can also help to get an impression of the Social Capital among the Romanian people. The term weak ties implies connections among individuals which one does not know very well, but by whom one is surrounded on a regular basis. In the EVS, the interviewers asked the participants weather they are a member of various groups. Let us therefor first have a very general overview of how the membership in any group can have on happiness and or life satisfaction. 
+# Note: for a better overview, the level of satisfaction has been grouped into 1: 'Not satisfied at all', 2-5: 'Not very satisfied', 6-9: 'Quiet satisfied', 10: 'Very satisfied'.
+member_happy <- ties_var_summary(happy_fac, "Happiness") +
+  labs(title = "Level of happiness for (non) members",
+       fill = "Level of happiness")
+  
+member_satisfaction <- ties_var_summary(satisfaction_group, "Satisfaction") +
+  labs(title = "Level of satisfaction for (non) members",
+       fill = "Level of satisfaction")
+
+grid.arrange(member_happy, member_satisfaction, nrow = 1)
+
+
+# It can be seen, that on average members of any given organisation or institution are happier and more satisfied, than individuals who are not.
+bind_rows( fun_happy(happy, member_activity, "an activity"),
+           fun_happy(happy, member_religion, "a religion"),
+           fun_happy(happy, member_selfhelp, "a selfhelp group"),
+           fun_happy(happy, member_charity, "a charity"),
+           fun_happy(happy, member_labor_union, "a labor union"),
+           fun_happy(happy, member_sports, "a sports group")) %>%
+  
+  group_by(member, cat, happy) %>%
+  summarise(n = n()) %>%
+  mutate(perc = n/sum(n)) %>%
+  
+  ggplot(aes(x = as_factor(member), y = perc, fill = as_factor(happy))) +
+  geom_bar(stat = "identity") +
+  labs(fill = "Level of Happiness",
+       y = "Distribution (%)",
+       title = "Member of ...") +
+  
+  scale_y_continuous(labels = scales::percent,
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
+  
+  facet_grid( ~ cat) +
+  
+  theme_cat
+# BITTE INTERPRETIEREN (ggfs. kopieren)
+
+
+# We assume that weak ties also appear in the neighborhood. Since neighbors are in some way silent, but steady companions, we find it highly important to look at what impact a certain neighborhood can have on the the trust the questioned people have in them.
+bind_rows( fun_happy(trust_neighbor, neighbours_diffrace, "have a different race"),
+           fun_happy(trust_neighbor, neighbours_drinkers, "are drinkers"),
+           fun_happy(trust_neighbor, neighbours_immig, "are immigrants"),
+           fun_happy(trust_neighbor, neighbours_drugs, "are drugaddicts"),
+           fun_happy(trust_neighbor, neighbours_homosex, "are homosexuals")) %>%
+  
+  group_by(member, cat, trust_neighbor) %>%
+  summarise(n = n()) %>%
+  mutate(perc = n/sum(n)) %>%
+  
+  ggplot(aes(x = as_factor(member), y = perc, fill = as_factor(trust_neighbor))) +
+  geom_bar(stat = "identity") +
+  labs(fill = "Level of trust in neighbours",
+       y = "Distribution (%)",
+       title = "Level of trust, given your neighbours ...") +
+  
+  scale_y_continuous(labels = scales::percent,
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
+  
+  facet_grid( ~ cat) +
+  
+  theme_cat
+# Kann auch interpretiert werden
