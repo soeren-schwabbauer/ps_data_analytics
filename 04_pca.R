@@ -21,16 +21,11 @@ library(factoextra)
 # load df
 if (dir.exists("G:/Geteilte Ablagen/")) {
   
-  INPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/INPUT/"
-  OUTPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/OUTPUT/"
-  CODEBOOK = "G:/Geteilte Ablagen/data_analytics/"
+  INPUT = "G:/Geteilte Ablagen/data_analytics/01_data_build/OUTPUT/"
   
 } else if (dir.exists("G:/Shared drives/")) {
   
-  
-  INPUT = "G:/Shared drives/data_analytics/02_analysis/INPUT/"
-  OUTPUT = "G:/Shared drives/data_analytics/02_analysis/OUTPUT/"
-  CODEBOOK = "G:/Shared drives/data_analytics/"
+  INPUT = "G:/Shared drives/data_analytics/01_data_build/OUTPUT/"
   
 }
 
@@ -41,9 +36,9 @@ load(paste0(INPUT, "Romania.rda"))
 #possible variables for political interest:
 pc.politics <- romania %>% 
   select(intrests_politics, politics_satisfaction, politics_democracy, importance_democracy, politics_petition,
-         politics_boycott,
-         politics_demo,
-         politics_strikes,
+       #  politics_boycott,
+      #   politics_demo,
+      #   politics_strikes,
   ) %>%
   
   prcomp( scale = TRUE)
