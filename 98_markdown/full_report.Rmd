@@ -1,11 +1,17 @@
 ---
-title: "Proseminar Data Analytics - Group: Romania"
-author: "Sören Schwabbauer, David Hollenstein, Alexander Hanser, Jürgen Bildstein"
-date: "2022-10-25"
+title: "Happiness Economics - Group: Romania"
+author: "[Sören Schwabbauer](soeren.schwabbauer@uibk.ac.at), [David Hollenstein](david.hollenstein@student.uibk.ac.at), [Alexander Hanser](alexander.hanser@student.uibk.ac.at), [Jürgen Bildstein](juergen.bildstein@student.uibk.ac.at)"
+#date: "2022-10-25"
 output: 
   html_document: 
-    number_sections: true
     css: style.css
+    
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    
+    number_sections: true
+
 ---
 
 ```{r setup, echo = FALSE}
@@ -431,11 +437,12 @@ These additional variables also allow a little bit of insight into the data. Sta
 For the following section, we shall have a look at how the subjective well-being (SWB), namely general happiness and life satisfaction, are linked to Social Capital
 In order to take a closer look at the SWB, we shall take the term of the Social Capital into account. The literature shows that Social Capital is an important factor for increasing the level of SWB. But first of all, what is Social Capital?
 Social capital can be seen as "a positive product of human interaction" (investopedia.com). While it can not be owned by somebody, it is the result of connections between individuals within social networks. Social capital can be seen as a base pillar for the effective functioning of social groups. The absence of Social capital can mislead a group of people to not achieve a common goal or purpose. 
-Despite its undeniable value for any group of individuals, there is no consensus on how social capital can be measured directly. This leads to the conclusion, that social capitalcan only be expressed through other indicators. The European Value Study (EVS) includes several indicators which can help to determine a countries Socal Capital 
+
+Despite its undeniable value for any group of individuals, there is no consensus on how social capital can be measured directly. This leads to the conclusion, that social capital can only be expressed through other indicators. The European Value Study (EVS) includes several indicators which can help to determine a countries Social Capital.
 In the following, we are going to consider trust as a key dimension for social capital. The EVS sees the trust variable as an indication whether most people can be trusted or not. in particular, the people participating in the survey get asked the following question: Generally speaking, would you say that most people can be trusted or that you can’t be too careful in dealing with people? 
 The answer is then separated into two possible answers (1) "Most people can be trusted" and (2) "Can't be too careful". In the following diagram, we are going to provide an overview of the responses of the qualitative variable.
 
-
+The following pie chart depicts the distribution of the two levels of trust in Romania
 ```{r , echo = FALSE, out.width="100%"}
 trust_summary <- romania %>%
   
@@ -468,6 +475,8 @@ trust_plot <- trust_summary %>%
 grid.arrange(trust_plot, tableGrob(trust_summary),  heights = c(2, 0.5))
 ```
 As we can see from the pie chart and the table, people in Romania are generally rather careful. The vast majority (approx. 85%) expresses their trust in people on a level of "can't be too careful. This rough overview already gives the impression, that the level of Social Capital is rather low in Romania.
+
+The following graph provides an overview on how trust and happines in life, as well as trust and satisfaction are eventually linked.
 ```{r , echo = FALSE, out.width="100%"}
 bind_rows(trust_var_summary(happy_fac, "Happiness"),
           trust_var_summary(satisfaction_fac, "Satisfaction")) %>%
@@ -493,23 +502,24 @@ bind_rows(trust_var_summary(happy_fac, "Happiness"),
   
   facet_grid( ~ cat, scales="free_x") 
 ```
-MUSS NOCH INTERPRETIERT WERDEN
+Muss noch weiter interpretiert werden.
 
 Besides the trust factor, analyzing "weak ties" can also help to get an impression of the Social Capital among the Romanian people. The term weak ties implies connections among individuals which one does not know very well, but by whom one is surrounded on a regular basis. In the EVS, the interviewers asked the participants weather they are a member of various groups. Let us therefor first have a very general overview of how the membership in any group can have on happiness and or life satisfaction. 
-Note: for a better overview, the level of satisfaction has been grouped into 1: 'Not satisfied at all', 2-5: 'Not very satisfied', 6-9: 'Quiet satisfied', 10: 'Very satisfied'.
+*Note: for a better overview, the level of satisfaction has been grouped into 1: 'Not satisfied at all', 2-5: 'Not very satisfied', 6-9: 'Quiet satisfied', 10: 'Very satisfied'.*
 ```{r , echo = FALSE, out.width="100%"}
 member_happy <- ties_var_summary(happy_fac, "Happiness") +
-  labs(title = "Level of happiness for (non) members",
+  labs(title = "Level of happiness ",
        fill = "Level of happiness",
-       subtitle = "of any group")
+       subtitle = "for (non) members of any group")
   
 member_satisfaction <- ties_var_summary(satisfaction_group, "Satisfaction") +
-  labs(title = "Level of satisfaction for (non) members",
+  labs(title = "Level of satisfactions",
        fill = "Level of satisfaction",
-       subtitle = "of any group")
+       subtitle = " for (non) member of any group")
 
 grid.arrange(member_happy, member_satisfaction, nrow = 1)
 ```
+BITTE NOCH INTERPRETIEREN
 
 ```{r , echo = FALSE, out.width="100%"}
 bind_rows( fun_happy(happy, member_activity, "an activity"),
@@ -571,18 +581,27 @@ Furthermore, weak ties also appear within a religion. Individuals which share si
 service_happy <-  romania %>%
   ggplot() +
   geom_mosaic(aes(x =  product(happy_fac, relig_service_fac), fill = happy_fac)) +
-  labs(title ="Comparison of happiness in life and church service attendance",
-       fill = "Scale of happiness") +
+  labs(title ="Comparison of happiness in life",
+       fill = "Scale of happiness",
+       subtitle = "with church service attendance") +
   mosaic_theme
 
 service_satis <- romania %>%
   ggplot() +
   geom_mosaic(aes(x =  product(satisfaction_group, relig_service_fac), fill = satisfaction_group)) +
   
-  labs(title ="Comparison of satisfaction and church service attendance",
-       fill = "Scale of satisfaction") +
+  labs(title ="Comparison of satisfaction",
+       fill = "Scale of satisfaction",
+       subtitle = "with church service attendance") +
   mosaic_theme
 
 grid.arrange(service_happy, service_satis, nrow = 1)
 ```
 Kann auch interpretiert werden.
+
+
+
+# Principal Component Analysis
+> Try to find appropriate components for the political interest and attitude dimension, e.g. run a PCA using the variables “Interested in politics”, “Satisfaction with the political system”, “Having a democratic political system”, “Importance of democracy”, ...
+
+

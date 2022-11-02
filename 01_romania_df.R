@@ -71,7 +71,7 @@ romania <- romania %>%
 
   
   # group satisfaction
-  mutate(satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "More than once a week",
+  mutate(satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "Not satisfied at all",
                                       as.numeric(satisfaction) == 2 |
                                         as.numeric(satisfaction) == 3 |
                                         as.numeric(satisfaction) == 4 |
@@ -82,7 +82,7 @@ romania <- romania %>%
                                         as.numeric(satisfaction) == 9 ~ "Quiet satisfied",
                                       as.numeric(satisfaction) == 10  ~ "Very satisfied")) %>%
   
-  mutate(relig_service_fac = case_when(as.numeric(relig_service) == 1  ~ "More than oncea week",
+  mutate(relig_service_fac = case_when(as.numeric(relig_service) == 1  ~ "More than once a week",
                                        as.numeric(relig_service) == 2  ~ "Once a week",
                                        as.numeric(relig_service) == 3  ~ "Once a month",
                                        as.numeric(relig_service) == 4 |
