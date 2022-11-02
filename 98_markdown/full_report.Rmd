@@ -21,6 +21,7 @@ library(lazyeval)
 library(gridExtra)
 library(ggmosaic)
 library(lemon)
+library(reshape2)
 
 
 if (dir.exists("G:/Geteilte Ablagen/")) {
@@ -496,7 +497,7 @@ MUSS NOCH INTERPRETIERT WERDEN
 
 Besides the trust factor, analyzing "weak ties" can also help to get an impression of the Social Capital among the Romanian people. The term weak ties implies connections among individuals which one does not know very well, but by whom one is surrounded on a regular basis. In the EVS, the interviewers asked the participants weather they are a member of various groups. Let us therefor first have a very general overview of how the membership in any group can have on happiness and or life satisfaction. 
 Note: for a better overview, the level of satisfaction has been grouped into 1: 'Not satisfied at all', 2-5: 'Not very satisfied', 6-9: 'Quiet satisfied', 10: 'Very satisfied'.
-
+```{r , echo = FALSE, out.width="100%"}
 member_happy <- ties_var_summary(happy_fac, "Happiness") +
   labs(title = "Level of happiness for (non) members",
        fill = "Level of happiness",
@@ -508,6 +509,7 @@ member_satisfaction <- ties_var_summary(satisfaction_group, "Satisfaction") +
        subtitle = "of any group")
 
 grid.arrange(member_happy, member_satisfaction, nrow = 1)
+```
 
 ```{r , echo = FALSE, out.width="100%"}
 bind_rows( fun_happy(happy, member_activity, "an activity"),
