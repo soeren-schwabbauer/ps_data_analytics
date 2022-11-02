@@ -36,11 +36,22 @@ load(paste0(INPUT, "Romania.rda"))
 #possible variables for political interest:
 pc.politics <- romania %>% 
   select(intrests_politics, politics_satisfaction, politics_democracy, importance_democracy, politics_petition,
-       #  politics_boycott,
-      #   politics_demo,
-      #   politics_strikes,
+         politics_boycott,
+         politics_demo,
+         politics_strikes,
+         politics_
   ) %>%
   
   prcomp( scale = TRUE)
 
 fviz_eig(pc.politics, addlabels = TRUE)
+
+grid.arrange(fviz_pca_ind(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
+             fviz_pca_ind(pc.politics, axes = c(1,3), label = "var", repel = TRUE), 
+             fviz_pca_ind(pc.politics, axes = c(2,3), label = "var", repel = TRUE),
+             fviz_eig(pc.politics, addlabels = TRUE),
+             ncol = 2)
+
+grid.arrange(fviz_pca_biplot(pc.politics, axes = c(1,3), label = "var", repel = TRUE),
+             fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
+             ncol = 2)
