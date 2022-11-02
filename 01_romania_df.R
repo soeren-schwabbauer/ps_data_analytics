@@ -48,6 +48,7 @@ romania <- data %>%
 # A003 doesn't exist in df
 
 
+
 # mutate new variables to factor
 romania <- romania %>%
   
@@ -67,8 +68,10 @@ romania <- romania %>%
   
   mutate(age = as.numeric(age)) %>%
   
+
+  
   # group satisfaction
-  mutate(satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "Not satisfied at all",
+  mutate(satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "More than once a week",
                                       as.numeric(satisfaction) == 2 |
                                         as.numeric(satisfaction) == 3 |
                                         as.numeric(satisfaction) == 4 |
@@ -77,7 +80,20 @@ romania <- romania %>%
                                         as.numeric(satisfaction) == 7  |
                                         as.numeric(satisfaction) == 8 |
                                         as.numeric(satisfaction) == 9 ~ "Quiet satisfied",
-                                      as.numeric(satisfaction) == 10  ~ "Very satisfied")) 
+                                      as.numeric(satisfaction) == 10  ~ "Very satisfied")) %>%
+  
+  mutate(relig_service_fac = case_when(as.numeric(relig_service) == 1  ~ "More than oncea week",
+                                       as.numeric(relig_service) == 2  ~ "Once a week",
+                                       as.numeric(relig_service) == 3  ~ "Once a month",
+                                       as.numeric(relig_service) == 4 |
+                                         as.numeric(relig_service) == 5  ~ "Special days only",
+                                       as.numeric(relig_service) == 6  ~ "Once a year",
+                                       as.numeric(relig_service) == 7  ~ "Less often",
+                                       as.numeric(relig_service) == 8  ~ "(Practically) Never"),
+         relig_service_fac = as_factor(relig_service_fac)) 
+                                       
+
+
 
 romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
 romania$income_scale_fac <- droplevels(romania$income_scale_fac)

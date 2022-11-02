@@ -59,7 +59,8 @@ ties_var_summary <- function(var, var_char){
       panel.background = element_rect(fill = "white"),
       panel.grid.major.y = element_line(size = 0, linetype = 'solid',
                                         colour = "grey") ,
-      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
+      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) ,
+      plot.subtitle = element_text(color = "black", size = 10, face = "italic")
       
     ) +
     
@@ -177,11 +178,13 @@ bind_rows(trust_var_summary(happy_fac, "Happiness"),
 # Note: for a better overview, the level of satisfaction has been grouped into 1: 'Not satisfied at all', 2-5: 'Not very satisfied', 6-9: 'Quiet satisfied', 10: 'Very satisfied'.
 member_happy <- ties_var_summary(happy_fac, "Happiness") +
   labs(title = "Level of happiness for (non) members",
-       fill = "Level of happiness")
+       fill = "Level of happiness",
+       subtitle = "of any group")
   
 member_satisfaction <- ties_var_summary(satisfaction_group, "Satisfaction") +
   labs(title = "Level of satisfaction for (non) members",
-       fill = "Level of satisfaction")
+       fill = "Level of satisfaction",
+       subtitle = "of any group")
 
 grid.arrange(member_happy, member_satisfaction, nrow = 1)
 
@@ -202,7 +205,7 @@ bind_rows( fun_happy(happy, member_activity, "an activity"),
   geom_bar(stat = "identity") +
   labs(fill = "Level of Happiness",
        y = "Distribution (%)",
-       title = "Member of ...") +
+       title = "Lebel of happiness, given somebody is a member of ...") +
   
   scale_y_continuous(labels = scales::percent,
                      breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
@@ -228,7 +231,7 @@ bind_rows( fun_happy(trust_neighbor, neighbours_diffrace, "have a different race
   geom_bar(stat = "identity") +
   labs(fill = "Level of trust in neighbours",
        y = "Distribution (%)",
-       title = "Level of trust, given your neighbours ...") +
+       title = "Level of trust in neighbours, given they ...") +
   
   scale_y_continuous(labels = scales::percent,
                      breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
@@ -237,3 +240,7 @@ bind_rows( fun_happy(trust_neighbor, neighbours_diffrace, "have a different race
   
   theme_cat
 # Kann auch interpretiert werden
+
+
+
+romania$god
