@@ -19,16 +19,11 @@ library(reshape2)
 # load df
 if (dir.exists("G:/Geteilte Ablagen/")) {
   
-  INPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/INPUT/"
-  OUTPUT = "G:/Geteilte Ablagen/data_analytics/02_analysis/OUTPUT/"
-  CODEBOOK = "G:/Geteilte Ablagen/data_analytics/"
+  INPUT = "G:/Geteilte Ablagen/data_analytics/01_data_build/OUTPUT/"
   
 } else if (dir.exists("G:/Shared drives/")) {
   
-  
-  INPUT = "G:/Shared drives/data_analytics/02_analysis/INPUT/"
-  OUTPUT = "G:/Shared drives/data_analytics/02_analysis/OUTPUT/"
-  CODEBOOK = "G:/Shared drives/data_analytics/"
+  INPUT = "G:/Shared drives/data_analytics/01_data_build/OUTPUT/"
   
 }
 
