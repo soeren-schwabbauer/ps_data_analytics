@@ -388,4 +388,11 @@ service_satis <- romania %>%
 
 grid.arrange(service_happy, service_satis, nrow = 1)
 
-
+# There doesn't seem to be a clear connection between church attendance and
+# happiness in life or life satisfaction. The mosaic patterns don't differ 
+# very much from each other, with one exception. It can be seen, that those
+# who practically never attend church report to be not very happy a little 
+# more frequently than those who (for instance) attend church more than once
+# a week. This effect however is not visible when switching to life 
+# satisfaction. Overall, the effect doesn't seem to be strong  enough to 
+# speculate a connection between church attendance and happiness or satisfaction.
