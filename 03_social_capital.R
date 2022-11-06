@@ -82,7 +82,19 @@ theme_cat <-   theme(
   plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
 ) 
   
-
+### Theme for Mosaic Plots
+mosaic_theme <-   theme( 
+  #legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  axis.text.x = element_text(angle=90, size = 7),
+  axis.text.y = element_text(size = 7),
+  panel.background = element_rect(fill = "white"),
+  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                    colour = "white") ,
+  legend.position = "none",
+  plot.title = element_text(color="black", size= 8, face="bold.italic", vjust = 0.5)
+) 
 
 
 ################################################################################
@@ -350,6 +362,30 @@ bind_rows( fun_happy(trust_neighbor, neighbours_diffrace, "have a different race
 # to trust their neighbors completely as well as a larger percentage of citizens
 # not trusting their neighbors at all if they have a different race.
 
+# Furthermore, weak ties also appear within a religion. Individuals which share 
+# similar interests, such as the same god, implicitly see each other on a regular 
+# basis when attending a church service. The following two mosaic plots shall 
+# provide an overview on how the attendance of a church service might affect the 
+# level of SWB, as we assume, that weak ties have a positive effect on the Social 
+# capital and therefor on the level of SWB.
 
-romania$god
+service_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, relig_service_fac), fill = happy_fac)) +
+  labs(title ="Comparison of happiness in life",
+       fill = "Scale of happiness",
+       subtitle = "with church service attendance") +
+  mosaic_theme
+
+service_satis <- romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, relig_service_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction",
+       fill = "Scale of satisfaction",
+       subtitle = "with church service attendance") +
+  mosaic_theme
+
+grid.arrange(service_happy, service_satis, nrow = 1)
+
 
