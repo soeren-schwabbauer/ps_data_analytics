@@ -45,10 +45,10 @@ politics_variables <- romania %>%
          politics_democracy,
          importance_democracy, 
   ) 
-politics_variables <- politics_variables %>% rownames_to_column()
+politics_variables_var <- politics_variables %>% rownames_to_column()
 
 politics_var <- function(varchar) {
-  politics_variables %>%
+  politics_variables_var %>%
   mutate_all(function(x) droplevels(as_factor(x))) %>% 
   melt(id.vars = "rowname", variable.name = "factor", value.name = "level") %>%
   
