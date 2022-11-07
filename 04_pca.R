@@ -101,9 +101,8 @@ pc.politics <-  politics_variables %>% prcomp( scale = TRUE)
 
 fviz_eig(pc.politics, addlabels = TRUE)
 summary(pc.politics)
-# INTERPRETATION
-# Choosing 5 PCs
-# Reason: With 5PCs around 80% of the variance is covered.
+
+# Looking at the principal components and their visualisation within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible "ellbow" which would identify the number of components that need to be considered to cover most of the variance. However, looking at the cumulative proportion within the summary of the PCA the analysis manages to explain 82.60% of variance when using 5 PCs. Therefore, moving forward, the analysis will consider 5 principal components.
 
 
 
@@ -115,8 +114,15 @@ grid.arrange(fviz_pca_ind(pc.politics, axes = c(1,2), label = "var", repel = TRU
 grid.arrange(fviz_pca_biplot(pc.politics, axes = c(1,3), label = "var", repel = TRUE),
              fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
              ncol = 2)
-
-
+grid.arrange(fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
+             fviz_pca_biplot(pc.politics, axes = c(1,3), label = "var", repel = TRUE),
+             fviz_pca_biplot(pc.politics, axes = c(1,4), label = "var", repel = TRUE),
+             fviz_pca_biplot(pc.politics, axes = c(1,5), label = "var", repel = TRUE),
+             ncol = 2)
+grid.arrange(fviz_pca_biplot(pc.politics, axes = c(2,3), label = "var", repel = TRUE),
+             fviz_pca_biplot(pc.politics, axes = c(2,4), label = "var", repel = TRUE),
+             fviz_pca_biplot(pc.politics, axes = c(2,5), label = "var", repel = TRUE),
+             ncol = 2)
 get_labels(
   politics_variables,
   attr.only = FALSE,
@@ -128,6 +134,7 @@ get_labels(
 
 
 # INTERPRETATION
+# 
 # Take care of the scaling of all the variables
 
 
