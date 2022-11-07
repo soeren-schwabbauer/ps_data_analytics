@@ -727,7 +727,7 @@ politics_variables <- romania %>%
          
          politics_satisfaction, 
          politics_democracy,
-         importance_democracy, 
+         importance_democracy 
   ) 
 politics_variables_plot <- politics_variables %>% rownames_to_column()
 
@@ -761,9 +761,17 @@ theme(
 
 grid.arrange(politics_var("intrests_politics" ), politics_var("politics_petition"), politics_var("politics_boycott"), politics_var("politics_demo"), ncol = 4)
 grid.arrange(politics_var("politics_strikes"), politics_var("politics_satisfaction"), politics_var("politics_democracy"), politics_var("importance_democracy"), ncol = 4)
+
+summary(pc.politics)
 ```
 
+
+INTERPRETATION
+Choosing 5 PCs
+Reason: With 5PCs around 80% of the variance is covered.
+
 Vielleicht kurz über verteilung reden.
+
 
 ```{r , echo = FALSE, out.width="100%"}
 
@@ -787,5 +795,9 @@ grid.arrange(fviz_pca_biplot(pc.politics, axes = c(1,4), label = "var", repel = 
 
 
 Bitte interpretieren.
+
+
+
+
 
 
