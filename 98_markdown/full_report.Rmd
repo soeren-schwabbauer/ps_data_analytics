@@ -798,16 +798,20 @@ grid.arrange(fviz_pca_biplot(pc.politics, axes = c(2,3), label = "var", repel = 
              fviz_pca_biplot(pc.politics, axes = c(2,5), label = "var", repel = TRUE),
              ncol = 2)
 ```
-INTERPRETATION
-Choosing 5 PCs
-Reason: With 5PCs around 80% of the variance is covered.
 
-Vielleicht kurz über verteilung reden.
 
 ## Interpretation
 
+Looking at the principal components and their visualization within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible "elbow" which would identify the number of components that need to be considered to cover most of the variance. However, looking at the cumulative proportion within the summary of the PCA the analysis manages to explain 82.60% of variance when using 5 PCs. Therefore, moving forward, the analysis will consider 5 principal components.
 
+Vielleicht kurz über verteilung reden.
 
-Bitte interpretieren.
+The biplots depicted above are between PCs 1 and 2 with all the other considered PCs respectively. These PCs were chosen since they contribute the most to explaining the variance. This can be seen in the screeplot as well as the summary of the PCA depicted above. 
 
+Interpreting the biplots is a little more tricky since when doing so, one needs to take into account how the data is scaled. In instances where this is the case, the scaling of the data will be specifically noted. However, looking at the biplots between PC 1 and 2 as well as 1 and 3 a couple things become clear which are very interesting to note. 
 
+Starting off, those variables closely monitoring active (often activist) means of political participation are closely related to one another. More concretely, we can see in almost all biplots, that politics_petition, politics_boycott, politics_demo and politics_strikes move in very similar directions and can therefore be understood as being correlated to a certain extent.
+
+Another interesting connection is between the variables politics_democracy and importance_democracy. On the biplots these two seem to contradict each other. However, this is one of the instances where the scaling of the variables is important. politics_democracy measures a given respondent's opinion on living in a democratic system. This is measured on a scale from "very good" to "very bad" but it is important to note, that the numeral value of 1 implies a positive opinion on living in a democracy whereas the value 4 implies the opposite. Looking at importance_democracy, this measures the importantce, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. 
+
+That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing. And looking at the scaling of these answers it makes sense, that on the biplots, they seem to contradict one another. Since a higher value in importance_democracy seems to correlate with a lower value in politics_democracy.
