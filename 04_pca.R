@@ -16,6 +16,7 @@ library(patchwork)
 library(reshape2)
 library(factoextra)
 library(spatstat.utils)
+library(sjlabelled)
 
 
 # load df
@@ -86,7 +87,7 @@ grid.arrange(politics_var("politics_strikes"), politics_var("politics_satisfacti
 #  | E025    | politics_petition     | Signing a petition                                |
 #  | E026    | politics_boycott      | Joining in boycotts                               |
 #  | E027    | politics_demo         | Attending lawful demonstrations                   |
-# | E028    | politics_strikes      | Joining unofficial strikes                        |
+#  | E028    | politics_strikes      | Joining unofficial strikes                        |
 #  | E111_01 | politics_satisfaction | Satisfaction with the political system            |
 #  | E117    | politics_democracy    | Having a democratic political system              |
 #  | E235    | importance_democracy  | Importance of democracy                           |
@@ -99,13 +100,38 @@ grid.arrange(politics_var("politics_strikes"), politics_var("politics_satisfacti
 pc.politics <-  politics_variables %>% prcomp( scale = TRUE)
 
 fviz_eig(pc.politics, addlabels = TRUE)
+summary(pc.politics)
+# INTERPRETATION
+# Choosing 5 PCs
+# Reason: With 5PCs around 80% of the variance is covered.
+
+
 
 grid.arrange(fviz_pca_ind(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
              fviz_pca_ind(pc.politics, axes = c(1,3), label = "var", repel = TRUE), 
              fviz_pca_ind(pc.politics, axes = c(2,3), label = "var", repel = TRUE),
              fviz_eig(pc.politics, addlabels = TRUE),
              ncol = 2)
-
 grid.arrange(fviz_pca_biplot(pc.politics, axes = c(1,3), label = "var", repel = TRUE),
              fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
              ncol = 2)
+
+
+get_labels(
+  politics_variables,
+  attr.only = FALSE,
+  values = "as.prefix",
+  non.labelled = FALSE,
+  drop.na = TRUE,
+  drop.unused = TRUE
+)
+
+
+# INTERPRETATION
+# Take care of the scaling of all the variables
+
+
+
+
+
+
