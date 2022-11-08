@@ -735,7 +735,9 @@ fviz_eig(pc.politics, addlabels = TRUE)
 
 ```
 
-Looking at the principal components and their visualization within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible “elbow” which would identify the number of components that need to be considered to cover most of the variance. However, considering the cumulative proportion within the summary of the PCA the analysis manages to explain 82.60% of variance when using 5 PCs. Therefore, moving forward, the analysis will consider 5 principal components.
+Looking at the principal components and their visualization within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible “elbow” which would identify the number of components that need to be considered to cover most of the variance. The first component makes up for around 32% of the explained variance. This is relatively low as compared to other datasets, but is not a matter of concern. It simply indicates that a large majority (100-32,4 = 67,6%) of observations are distributed over more than one dimension. We want to reduce the data’s dimensionality and at the same time reach 80% of explained variance, hence we are left with 5 PC’s to reach a cumulative explained variance of 82,6%. 
+
+
 
 ### scatterplot for PC1
 ```{r}
@@ -791,13 +793,7 @@ Also higher interest in politics seems to lead to a higher satisfaction with the
 fviz_pca_biplot(pc.politics, axes = c(1,4), label = "var", repel = TRUE)
 ``` 
 
-What sticks out in comparing the first and fourth principal component, is that a higher importance in democracy seems to be negatively correlated to the attendance of an unlawful strike. 
-
-(Even though this might seem to imply at first, that those who place higher value on democracy do not attend strikes very often, the opposite is actually the case. This is due to the scaling of the variable. A low numerical value in politics_strikes means that a given respondent has already participated in a strike. Therefore we can show, that those who place value on democracy can observed to go on strikes more often. This extends (to a certain extent) also to political boycotts.)
-
-Here it can also be seen, that unlawful strikes and attending a demonstration are two different things. Meaning, that a demonstration is rather attended by people who have a high importance in democracy.
-
-
+What sticks out in comparing the first and fourth principal component, is that a higher importance in democracy seems to be negatively correlated to the attendance of a strike. Even though this might seem to imply at first, that those who place higher value on democracy do not attend strikes very often, the opposite is actually the case. This is due to the scaling of the variable. A low numerical value in politics_strikes means that a given respondent has already participated in a strike. Therefore we can show, that those who place value on democracy can observed to go on strikes more often. This extends (to a certain extent) also to political boycotts.
 </div>
 ___ 
 
