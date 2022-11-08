@@ -33,6 +33,8 @@ library(tibble)
 library(webr)
 library(patchwork)
 library(factoextra)
+library(sjlabelled)
+
 
 if (dir.exists("G:/Geteilte Ablagen/")) {
   
@@ -704,13 +706,26 @@ grid.arrange(politics_var("politics_strikes"), politics_var("politics_satisfacti
 
 ```
 
-```{r }
-# note: summary noch einbinden
+The graphs indicate a first rough overview of the political climate in Romania. For more than half of the people are not very interested to not at all interested in politics, which reflects in taking politial actions. Only few people have signed a petition, joined a boycott, joined a lawful demonstration or even joined an unofficial strike. Nevertheless, a slight majority sees democracy as a very good idea, and highlight the importance of democracy.
+
+The following tables provide an overview of the exact scaling for the variables
+
+```{r}
+get_labels(
+  politics_variables,
+  attr.only = FALSE,
+  values = "as.prefix",
+  non.labelled = FALSE,
+  drop.na = TRUE,
+  drop.unused = TRUE
+)
+
 
 ```
 
-
 ## Analysis {.tabset}
+
+In order to find groups in the data, we decided to plot the dimensions among each other. In the following section, one can see a Screeplot in 4.2.1, and the different scatterplots for the first two principal components. We neglect comparing the 4th and the 5th principal component, since we find the variance covered, to be too low.
 
 ### Screeplot
 ```{r}
@@ -720,35 +735,71 @@ fviz_eig(pc.politics, addlabels = TRUE)
 
 ```
 
+Looking at the principal components and their visualization within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible “elbow” which would identify the number of components that need to be considered to cover most of the variance. However, considering the cumulative proportion within the summary of the PCA the analysis manages to explain 82.60% of variance when using 5 PCs. Therefore, moving forward, the analysis will consider 5 principal components.
 
-### Biplot PC1
+### scatterplot for PC1
 ```{r}
-grid.arrange(fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE),
-             fviz_pca_biplot(pc.politics, axes = c(1,3), label = "var", repel = TRUE),
-             fviz_pca_biplot(pc.politics, axes = c(1,4), label = "var", repel = TRUE),
-             fviz_pca_biplot(pc.politics, axes = c(1,5), label = "var", repel = TRUE),
+grid.arrange(fviz_pca_ind(pc.politics, axes = c(1,2), label = "none", repel = TRUE),
+             fviz_pca_ind(pc.politics, axes = c(1,3), label = "none", repel = TRUE),
+             fviz_pca_ind(pc.politics, axes = c(1,4), label = "none", repel = TRUE),
+             fviz_pca_ind(pc.politics, axes = c(1,5), label = "none", repel = TRUE),
              ncol = 2)
 ```
 
-### Biplot with PC2
+From comparing these graphs, we can see, that there is a clear group forming for the first two dimensions. However, a similar group forms for the first and the fourth dimension. 
+
+
+### scatterplot for PC2
 
 ```{r, echo=FALSE}
-grid.arrange(fviz_pca_biplot(pc.politics, axes = c(2,3), label = "var", repel = TRUE),
-             fviz_pca_biplot(pc.politics, axes = c(2,4), label = "var", repel = TRUE),
-             fviz_pca_biplot(pc.politics, axes = c(2,5), label = "var", repel = TRUE),
+grid.arrange(fviz_pca_ind(pc.politics, axes = c(2,3), label = "none", repel = TRUE),
+             fviz_pca_ind(pc.politics, axes = c(2,4), label = "none", repel = TRUE),
+             fviz_pca_ind(pc.politics, axes = c(2,5), label = "none", repel = TRUE),
              ncol = 2)
 ```
 
+The second and the third dimension seem to characterize a group as well. 
 
-## Interpretation
 
-Looking at the principal components and their visualization within the screeplot in Section 4.2.1, it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible "elbow" which would identify the number of components that need to be considered to cover most of the variance. However, considering the cumulative proportion within the summary of the PCA the analysis manages to explain 82.60% of variance when using 5 PCs. Therefore, moving forward, the analysis will consider 5 principal components.
+</div>
+___
 
-The biplots depicted above are between PCs 1 and 2 with all the other considered PCs respectively. These PCs were chosen since they contribute the most to explaining the variance. This can be seen in the screeplot as well as the summary of the PCA depicted above. 
+
+## Biplots {.tabset}
+
+In order to identify what characterizes the groups, we want to provide some Biplots, which seemed to give us some information about the groups we might find in the data, without neglecting the level of variance we cover with the analysis.
+
+### Biplot PC1&PC2
+```{r, echo=FALSE}
+fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE)
+```
+
+In the Biplot between the first and the second principal component, we can see that the importance of democracy is negatively correlated to the attitude of having a democratic system. Due to the opposite scaling, it can be seen, that seeing the democracy as important also induced a positive attitude towards the democratic system. 
+
+The remaining vectors rather form a 90 degree angle towards the two mentioned vectors. Therefor it can be said, that the importance of democracy or the satisfaction with the democratic system is uncorrelated to whether somebody has attended a boycot, a strike, or a demonstration.
+
+The interests in politics seems to also play a role in the importance for democracy, since they are positively correlated (same counts fo the attitude towards a democratic system as a whole)
+
+Also higher interest in politics seems to lead to a higher satisfaction with the political system.
+
+
+### Biplot PC1&PC4
+```{r, echo=FALSE}
+fviz_pca_biplot(pc.politics, axes = c(1,4), label = "var", repel = TRUE)
+``` 
+
+What sticks out in comparing the first and fourth principal component, is that a higher importance in democracy seems to be negatively correlated to the attendance of an unlawful strike. Here it can also be seen, that unlawful strikes and attending a demonstration are two different things. Meaning, that a demonstration is rather attended by people who have a high importance in democracy.
+
+
+</div>
+___ 
+
+Starting off, those variables closely monitoring active (often activist) means of political participation are closely related to one another. More concretely, we can see in almost all biplots, that politics_petition, politics_boycott, politics_demo and politics_strikes move in very similar directions and can therefore be understood as being correlated to a certain extent.
+
 
 Interpreting the biplots is a little more tricky since when doing so, one needs to take into account how the data is scaled. For instances, the scaling of the data will be specifically noted. However, looking at the biplots between PC 1 and 2 as well as 1 and 3 a couple things become clear which are very interesting to note. 
 
-Starting off, those variables closely monitoring active (often activist) means of political participation are closely related to one another. More concretely, we can see in almost all biplots, that politics_petition, politics_boycott, politics_demo and politics_strikes move in very similar directions and can therefore be understood as being correlated to a certain extent.
+
 
 Another interesting connection is between the variables politics_democracy and importance_democracy. On the biplots these two seem to contradict each other. However, this is one of the instances where the scaling of the variables is important. politics_democracy measures a given respondent's opinion on living in a democratic system. This is measured on a scale from "very good" to "very bad" but it is important to note, that the numeral value of 1 implies a positive opinion on living in a democracy whereas the value 4 implies the opposite. Looking at importance_democracy, this measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. 
 
