@@ -769,12 +769,15 @@ ___
 
 In order to identify what characterizes the groups, we want to provide some Biplots, which seemed to give us some information about the groups we might find in the data, without neglecting the level of variance we cover with the analysis.
 
+When interpreting the biplots, one also need to take into account, how the data is scaled. For instances, the scaling of the data will be specifically noted. However, looking at the biplots between PC 1 and 2 as well as 1 and 3 a couple things become clear which are very interesting to note. 
+
+
 ### Biplot PC1&PC2
 ```{r, echo=FALSE}
 fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE)
 ```
 
-In the Biplot between the first and the second principal component, we can see that the importance of democracy is negatively correlated to the attitude of having a democratic system. Due to the opposite scaling, it can be seen, that seeing the democracy as important also induced a positive attitude towards the democratic system. 
+In the Biplot between the first and the second principal component, we can see that the importance of democracy is negatively correlated to the attitude of having a democratic system. However, the scaling of the variables is important. politics_democracy measures a given respondent's opinion on living in a democratic system. This is measured on a scale from "very good" to "very bad" but it is important to note, that the numeral value of 1 implies a positive opinion on living in a democracy whereas the value 4 implies the opposite. Importance_democracy measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing. And looking at the scaling of these answers it makes sense, that on the biplots, they seem to contradict one another. Since a higher value in importance_democracy seems to correlate with a lower value in politics_democracy.
 
 The remaining vectors rather form a 90 degree angle towards the two mentioned vectors. Therefor it can be said, that the importance of democracy or the satisfaction with the democratic system is uncorrelated to whether somebody has attended a boycot, a strike, or a demonstration.
 
@@ -794,13 +797,11 @@ What sticks out in comparing the first and fourth principal component, is that a
 </div>
 ___ 
 
-Starting off, those variables closely monitoring active (often activist) means of political participation are closely related to one another. More concretely, we can see in almost all biplots, that politics_petition, politics_boycott, politics_demo and politics_strikes move in very similar directions and can therefore be understood as being correlated to a certain extent.
-
-
-Interpreting the biplots is a little more tricky since when doing so, one needs to take into account how the data is scaled. For instances, the scaling of the data will be specifically noted. However, looking at the biplots between PC 1 and 2 as well as 1 and 3 a couple things become clear which are very interesting to note. 
 
 
 
-Another interesting connection is between the variables politics_democracy and importance_democracy. On the biplots these two seem to contradict each other. However, this is one of the instances where the scaling of the variables is important. politics_democracy measures a given respondent's opinion on living in a democratic system. This is measured on a scale from "very good" to "very bad" but it is important to note, that the numeral value of 1 implies a positive opinion on living in a democracy whereas the value 4 implies the opposite. Looking at importance_democracy, this measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. 
 
-That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing. And looking at the scaling of these answers it makes sense, that on the biplots, they seem to contradict one another. Since a higher value in importance_democracy seems to correlate with a lower value in politics_democracy.
+
+
+
+
