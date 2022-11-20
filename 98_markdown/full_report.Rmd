@@ -456,7 +456,7 @@ Despite its undeniable value for any group of individuals, there is no consensus
 In the following, we are going to consider trust as a key dimension for social capital. The EVS sees the trust variable as an indication whether most people can be trusted or not. in particular, the people participating in the survey get asked the following question: Generally speaking, would you say that most people can be trusted or that you can’t be too careful in dealing with people? 
 The answer is then separated into two possible answers (1) "Most people can be trusted" and (2) "Can't be too careful". In the following diagram, we are going to provide an overview of the responses of the qualitative variable.
 
-The following pie chart depicts the distribution of the two levels of trust in Romania
+The following table depicts the distribution of the two levels of trust in Romania
 ```{r , echo = FALSE, out.width="100%"}
 trust_summary <- romania %>%
   
@@ -464,29 +464,8 @@ trust_summary <- romania %>%
   summarise(n = n()) %>%
   mutate(prop = round(n/sum(n)*100,2))
 
-trust_plot <- trust_summary %>%
-  
-  ggplot(aes(x = "", y = prop, fill = trust_fac)) +
-  geom_bar(stat = "identity", width = 1, color = "white") +
-  coord_polar("y", start = 0) +
-  geom_text(aes(y = prop, label = n), color = "black", position = position_stack(vjust = 0.5)) +
-  
-  labs(title = "Dimensions of trust",
-       fill = "Respones to the question") +
-  
-  theme(
-    axis.title.x = element_blank(),
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.title.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    panel.background = element_rect(fill = "white"),
-    panel.grid.major.y = element_line(colour = "white"),
-    plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
-    )
 
-grid.arrange(trust_plot, tableGrob(trust_summary),  heights = c(2, 0.5))
+grid.arrange(tableGrob(trust_summary),  heights = c(1))
 ```
 As we can see from the pie chart and the table, people in Romania are generally rather careful. The vast majority (approx. 85%) expresses their trust in people on a level of "can't be too careful. This rough overview already gives the impression, that the level of Social Capital is rather low in Romania.
 
@@ -706,9 +685,9 @@ grid.arrange(politics_var("politics_strikes"), politics_var("politics_satisfacti
 
 ```
 
-The graphs indicate a first rough overview of the political climate in Romania. For more than half of the people are not very interested to not at all interested in politics, which reflects in taking politial actions. Only few people have signed a petition, joined a boycott, joined a lawful demonstration or even joined an unofficial strike. Nevertheless, a slight majority sees democracy as a very good idea, and highlight the importance of democracy.
+The graphs indicate a first rough overview of the political climate in Romania. For more than half of the people are not very interested to not at all interested in politics, which reflects in taking political actions. Only few people have signed a petition, joined a boycott, joined a lawful demonstration or even joined an unofficial strike. Nevertheless, a slight majority sees democracy as a very good idea, and highlight the importance of democracy.
 
-The following tables provide an overview of the exact scaling for the variables
+The following tables provide an overview of the exact scaling for the variables. We decided to scale the variables in a way, that a higher number indicates a more positive attitude/ a higher involvement towards the variable.
 
 ```{r}
 get_labels(
@@ -777,9 +756,9 @@ When interpreting the biplots, one also need to take into account, how the data 
 fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE)
 ```
 
-In the Biplot between the first and the second principal component, we can see that the importance of democracy is negatively correlated to the attitude of having a democratic system. However, the scaling of the variables is important. politics_democracy measures a given respondent's opinion on living in a democratic system. This is measured on a scale from "very good" to "very bad" but it is important to note, that the numeral value of 1 implies a positive opinion on living in a democracy whereas the value 4 implies the opposite. Importance_democracy measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing. And looking at the scaling of these answers it makes sense, that on the biplots, they seem to contradict one another. Since a higher value in importance_democracy seems to correlate with a lower value in politics_democracy.
+In the Biplot between the first and the second principal component, we can see that the importance of democracy is positvly correlated to the attitude of having a democratic system. Importance_democracy measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing.
 
-The remaining vectors rather form a 90 degree angle towards the two mentioned vectors. Therefor it can be said, that the importance of democracy or the satisfaction with the democratic system is uncorrelated to whether somebody has attended a boycot, a strike, or a demonstration.
+The remaining vectors rather form a nearly 90 degree angle towards the two mentioned vectors. Therefor it can be said, that the importance of democracy or the satisfaction with the democratic system is uncorrelated to whether somebody has attended a boycott, a strike, or a demonstration.
 
 The interests in politics seems to also play a role in the importance for democracy, since they are positively correlated (same counts fo the attitude towards a democratic system as a whole)
 
