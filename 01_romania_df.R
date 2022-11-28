@@ -118,10 +118,6 @@ romania$happy <- drop_unused_value_labels(romania$happy)
 romania$happy <- reverse_labelled_values(romania$happy)
 romania$happy_fac <- as_factor(romania$happy)
 
-romania$satisfaction_group <- drop_unused_value_labels(romania$satisfaction_group)
-romania$satisfaction_group <- reverse_labelled_values(romania$satisfaction_group)
-romania$satisfaction_group_fac <- as_factor(romania$satisfaction_group)
-
 romania$intrests_politics <- drop_unused_value_labels(romania$intrests_politics)
 romania$intrests_politics <- reverse_labelled_values(romania$intrests_politics)
 romania$intrests_politics_fac <- as_factor(romania$intrests_politics)
@@ -146,12 +142,16 @@ romania$politics_democracy <- drop_unused_value_labels(romania$politics_democrac
 romania$politics_democracy <- reverse_labelled_values(romania$politics_democracy)
 romania$politics_democracy_fac <- as_factor(romania$politics_democracy)
 
+romania$imp_fam <- drop_unused_value_labels(romania$imp_fam)
+romania$imp_fam <- reverse_labelled_values(romania$imp_fam)
+romania$imp_fam_fac <- as_factor(romania$imp_fam)
+
+
 ###
 # do not flip
-romania$politics_satisfaction
-romania$importance_democracy
+#romania$politics_satisfaction
+#romania$importance_democracy
 #####
-happy_fac
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
