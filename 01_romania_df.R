@@ -70,7 +70,9 @@ romania <- romania %>%
          
          sex_fac = as_factor(sex),
          
-         trust_fac = as_factor(trust)) %>%
+         trust_fac = as_factor(trust),
+         
+         freedom_fac = as_factor(freedom)) %>%
   
   mutate(age = as.numeric(age)) %>%
   
@@ -88,6 +90,7 @@ romania <- romania %>%
                                         as.numeric(satisfaction) == 9 ~ "Quiet satisfied",
                                       as.numeric(satisfaction) == 10  ~ "Very satisfied")) %>%
   
+  
   mutate(relig_service_fac = case_when(as.numeric(relig_service) == 1  ~ "More than once a week",
                                        as.numeric(relig_service) == 2  ~ "Once a week",
                                        as.numeric(relig_service) == 3  ~ "Once a month",
@@ -96,9 +99,20 @@ romania <- romania %>%
                                        as.numeric(relig_service) == 6  ~ "Once a year",
                                        as.numeric(relig_service) == 7  ~ "Less often",
                                        as.numeric(relig_service) == 8  ~ "(Practically) Never"),
-         relig_service_fac = as_factor(relig_service_fac)) 
-                                       
-
+         
+         relig_service_fac = as_factor(relig_service_fac))%>%
+  
+  
+  mutate(freedom_group = case_when(as.numeric(freedom) == 1 |
+                             as.numeric(freedom) == 2 |
+                             as.numeric(freedom) == 3 |
+                             as.numeric(freedom) == 4 ~ "1) not much",
+                           as.numeric(freedom) == 5  | 
+                                     as.numeric(freedom) == 6  |
+                                     as.numeric(freedom) == 7 ~ "2) a little",
+                           as.numeric(freedom) == 8 |
+                             as.numeric(freedom) == 9  ~ "3) rather agree",
+                           as.numeric(freedom) == 10  ~ "4) a great deal"))
 
 
 romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
@@ -107,7 +121,7 @@ romania$marst_fac <- droplevels(romania$marst_fac)
 romania$health_fac <- droplevels(romania$health_fac)
 romania$sex <-  droplevels(romania$sex_fac)
 romania$trust_fac <- droplevels(romania$trust_fac)
-
+romania$freedom_fac <- droplevels(romania$freedom_fac)
 
 
 # check for all variables

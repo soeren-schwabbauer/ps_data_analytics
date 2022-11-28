@@ -40,3 +40,16 @@ boxplot_for_barplot <- function(var){
       plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
     ) 
 }
+
+
+mosaic_theme <-   theme( 
+  #legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  axis.text.x = element_text(angle=90),
+  panel.background = element_rect(fill = "white"),
+  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
+                                    colour = "white") ,
+  legend.position = "none",
+  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+) 
