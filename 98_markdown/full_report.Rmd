@@ -758,7 +758,7 @@ When interpreting the biplots, one also need to take into account, how the data 
 fviz_pca_biplot(pc.politics, axes = c(1,2), label = "var", repel = TRUE)
 ```
 
-In the Biplot between the first and the second principal component, we can see that the importance of democracy is positvly correlated to the attitude of having a democratic system. Importance_democracy measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing.
+In the Biplot between the first and the second principal component, we can see that the importance of democracy is positively correlated to the attitude of having a democratic system. Importance_democracy measures the importance, that a given respondent attributes to the concept of democracy as a whole. This is measured on a scale from 1-10 with 10 attributing the highest level of importance to the concept of democracy. That being said, it makes sense, that a respondent who thinks highly of democracy would attribute a lot of importance to the concept of democracy while simultaneously being convinced that living in a democracy is an important thing.
 
 The remaining vectors rather form a nearly 90 degree angle towards the two mentioned vectors. Therefor it can be said, that the importance of democracy or the satisfaction with the democratic system is uncorrelated to whether somebody has attended a boycott, a strike, or a demonstration.
 

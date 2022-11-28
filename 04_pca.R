@@ -37,14 +37,18 @@ load(paste0(INPUT, "Romania.rda"))
 
 ### select relevant variables
 politics_variables <- romania %>% 
-  select(intrests_politics, politics_petition, 
-         politics_boycott,
+  select(intrests_politics, 
+         politics_satisfaction, 
+         
+         importance_democracy, 
+         
+         
+       #  politics_petition, 
+       #  politics_boycott,
          politics_demo,
          politics_strikes,
          
-         politics_satisfaction, 
-         politics_democracy,
-         importance_democracy, 
+         #politics_satisfaction, 
   ) 
 politics_variables_var <- politics_variables %>% rownames_to_column()
 

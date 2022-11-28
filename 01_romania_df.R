@@ -10,6 +10,7 @@ library(dplyr)
 library(readxl)
 library(haven)
 library(codebook)
+library(labelled)
 
 # load df
 if (dir.exists("G:/Geteilte Ablagen/")) {
@@ -61,8 +62,6 @@ romania <- romania %>%
   
   mutate(satisfaction_fac = as_factor(satisfaction),
          
-         happy_fac = as_factor(happy),
-
          income_scale_fac = as_factor(income_scale),
          
          health_fac = as_factor(health),
@@ -104,7 +103,6 @@ romania <- romania %>%
 
 romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
 romania$income_scale_fac <- droplevels(romania$income_scale_fac)
-romania$happy_fac <- droplevels(romania$happy_fac)
 romania$marst_fac <- droplevels(romania$marst_fac)
 romania$health_fac <- droplevels(romania$health_fac)
 romania$sex <-  droplevels(romania$sex_fac)
@@ -116,53 +114,44 @@ romania$trust_fac <- droplevels(romania$trust_fac)
 
 # okay for:
 # satisfaction 
-reverse <- c("intrests_politics")
-reverse_fac <- paste0(reverse, "_fac")
+romania$happy <- drop_unused_value_labels(romania$happy)
+romania$happy <- reverse_labelled_values(romania$happy)
+romania$happy_fac <- as_factor(romania$happy)
 
-reverse <- function(var, var_fac){
-  romania$var_fac <- as_factor(romania$var)
-  romania$var_fac <- droplevels(romania$var_fac)
-  romania$var <- reverse_labelled_values(romania$var_fac)
+romania$satisfaction_group <- drop_unused_value_labels(romania$satisfaction_group)
+romania$satisfaction_group <- reverse_labelled_values(romania$satisfaction_group)
+romania$satisfaction_group_fac <- as_factor(romania$satisfaction_group)
 
-}
-
-reverse(intrests_politics, intrests_politics_fac)
-
-reverse_labelled_values(happy_fac)
-reverse_labelled_values(health_fac)
-reverse_labelled_values(trust_fac)
-
+romania$intrests_politics <- drop_unused_value_labels(romania$intrests_politics)
+romania$intrests_politics <- reverse_labelled_values(romania$intrests_politics)
 romania$intrests_politics_fac <- as_factor(romania$intrests_politics)
-romania$intrests_politics_fac <- droplevels(romania$intrests_politics_fac)
-romania$intrests_politics <- reverse_labelled_values(romania$intrests_politics_fac)
 
+romania$politics_petition <- drop_unused_value_labels(romania$politics_petition)
+romania$politics_petition <- reverse_labelled_values(romania$politics_petition)
 romania$politics_petition_fac <- as_factor(romania$politics_petition)
-romania$politics_petition_fac <- droplevels(romania$politics_petition_fac)
-romania$politics_petition <- reverse_labelled_values(romania$politics_petition_fac)
 
+romania$politics_boycott <- drop_unused_value_labels(romania$politics_boycott)
+romania$politics_boycott <- reverse_labelled_values(romania$politics_boycott)
 romania$politics_boycott_fac <- as_factor(romania$politics_boycott)
-romania$politics_boycott_fac <- droplevels(romania$politics_boycott_fac)
-romania$politics_boycott <- reverse_labelled_values(romania$politics_boycott_fac)
 
-
+romania$politics_demo <- drop_unused_value_labels(romania$politics_demo)
+romania$politics_demo <- reverse_labelled_values(romania$politics_demo)
 romania$politics_demo_fac <- as_factor(romania$politics_demo)
-romania$politics_demo_fac <- droplevels(romania$politics_demo_fac)
-romania$politics_demo <- reverse_labelled_values(romania$politics_demo_fac)
 
-romania$politics_demo_fac <- as_factor(romania$politics_demo)
-romania$politics_demo_fac <- droplevels(romania$politics_demo_fac)
-romania$politics_demo <- reverse_labelled_values(romania$politics_demo_fac)
-attach(romania)
+romania$politics_strikes <- drop_unused_value_labels(romania$politics_strikes)
+romania$politics_strikes <- reverse_labelled_values(romania$politics_strikes)
+romania$politics_strikes_fac <- as_factor(romania$politics_strikes)
 
-intrests_politics
-politics_petition
-politics_boycott
-politics_demo
-politics_strikes
-politics_satisfaction
-politics_democracy
-importance_democracy 
+romania$politics_democracy <- drop_unused_value_labels(romania$politics_democracy)
+romania$politics_democracy <- reverse_labelled_values(romania$politics_democracy)
+romania$politics_democracy_fac <- as_factor(romania$politics_democracy)
+
+###
+# do not flip
+romania$politics_satisfaction
+romania$importance_democracy
+#####
+happy_fac
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
-
