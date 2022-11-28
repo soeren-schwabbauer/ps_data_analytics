@@ -36,58 +36,68 @@ if (dir.exists("G:/Geteilte Ablagen/")) {
 
 # load dataframe
 load(paste0(INPUT, "Romania.rda"))
-
-####################################################################
-mosaic_theme <-   theme( 
-  #legend.position = "none",
-  axis.title.x = element_blank(),
-  axis.title.y = element_blank(),
-  axis.text.x = element_text(angle=90),
-  panel.background = element_rect(fill = "white"),
-  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
-                                    colour = "white") ,
-  legend.position = "none",
-  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
-) 
-####################################################################
+source("99_functions.R")
 
 
-# explore variables
-attach(romania)
+#VARIABLLE: MEMBER OF SOMETHING
 
-activity_df <- romania %>% 
-  select(contains("member_")) %>%
-  rowwise() %>%
-  mutate(tot_member = sum(cur_data())) %>%
-  ungroup() #%>% 
- # group_by(tot_member) %>%
- # summarise(n = n())
+barplot_var(member_tot_fac) +
+  labs(title ="Number of associations one is a member ") 
 
-ggplot(activity_df, aes(x = tot_member)) +
-  geom_bar()
+# As one can see from the distribution of number of memberships, it does not make sense to keep the total number memberships as a variable, since the wide majority is not even in a single organization. Nevertheless, knowing this also helps for the further analysis. We can now add the variable "are you member in at least one organisation?". Let us have a look an the distribution then.
 
-# As one can see from the distribution of number of memeberships, it does not make sense to keep the total number memberships as a varible, since the wide majority is not even in a single organization. Nevertheless, knowing this also helps for the further analysis. We can now add the variable "are you member in at least one organisation?". Let us have a look an the distribution then.
+# binary variable
 
-romania <- romania %>% 
-  
-  rowwise() %>%
-  mutate(tot_member = sum(member_religion, member_activity, member_labor_union, member_party, member_association, member_sports, member_consumer, member_other, member_charity, member_selfhelp)) %>%
-  ungroup() %>%
-  mutate(member_any = ifelse(tot_member >= 1, 1, 0))
+barplot_var(member_any_fac) +
+  labs(title ="Are you a member in any association")
 
-ggplot(romania, aes(x = member_any)) +
-  geom_bar()
+# we decided to keep the variable "are you a member of any of these organisations". Let us therefor have a quick look on how this weak tie influences the happiness and the life satisfaction of the Romanians.
 
-# we decided to keep the variable "are you a member of any of these organisations". Let us therefor have a quick look on how this weak tie influences the happiness and the life satisfaction of the romanians.
 
 anymember_happy <-  romania %>%
   ggplot() +
-  geom_mosaic(aes(x =  product(happy_fac, as.factor(member_any), fill = as.factor(member_any)))) +
+  geom_mosaic(aes(x =  product(happy_fac, member_any_fac), fill = happy_fac)) +
   
-  labs(title ="Comparison of happiness in life and health",
+  labs(title ="Comparison of happiness in life \n and member in any organisation",
        fill = "Scale of happiness") +
   mosaic_theme
 
-            
+anymember_satis <- romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, member_any_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life \n and member in any organisation",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+
+grid.arrange(anymember_happy, anymember_satis, nrow = 1)
+
+# INTERPRETATION            
 
 
+##### Additional variable: importance of friends
+# kurzes Vorwort
+barplot_var(imp_friends_fac) +
+  labs(title ="Number of associations one is a member ") 
+# INTERPRETATION
+
+
+# kurzes vorwort zum mosaic plot
+imp_friends_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, imp_friends_fac), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life \n and member in any organisation",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+imp_friends_satis <- romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, imp_friends_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life \n and member in any organisation",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+
+grid.arrange(imp_friends_happy, imp_friends_satis, nrow = 1)
+# INTERPRETATION

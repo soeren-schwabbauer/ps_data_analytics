@@ -160,6 +160,22 @@ romania$imp_fam <- drop_unused_value_labels(romania$imp_fam)
 romania$imp_fam <- reverse_labelled_values(romania$imp_fam)
 romania$imp_fam_fac <- as_factor(romania$imp_fam)
 
+romania$imp_friends <- drop_unused_value_labels(romania$imp_friends)
+romania$imp_friends <- reverse_labelled_values(romania$imp_friends)
+romania$imp_friends_fac <- as_factor(romania$imp_friends)
+## add variable member_any: are you a member in any organisation
+romania <- romania %>% 
+  
+  rowwise() %>%
+  mutate(member_tot = sum(member_religion, member_activity, member_labor_union, member_party, member_association, member_sports, member_consumer, member_other, member_charity, member_selfhelp)) %>%
+  ungroup() %>%
+  mutate(member_any = ifelse(member_tot >= 1, 1, 0)) %>%
+  
+  mutate(member_any_fac = factor(member_any),
+         member_any_fac = recode_factor(member_any_fac, "0"= "no", "1" = "yes")) %>%
+  
+  mutate(member_tot_fac = as_factor(member_tot),
+         member_tot_fac =fct_relevel(member_tot_fac,c("0","1","2","3","4","5","6","7","10")))
 
 ###
 # do not flip

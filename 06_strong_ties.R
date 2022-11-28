@@ -28,12 +28,6 @@ source("99_functions.R")
 
 
 
-
-##### functions needed
-
-## first: flip variable in 01 -> done.
-romania$imp_fam
-
 # The variable "Important in life: Family" indicates another strong tie. In order to get an overview of the variable, let us have a look at the distribution. 
 barplot_var(imp_fam_fac) +
   labs( title = "Important in life: Family")
