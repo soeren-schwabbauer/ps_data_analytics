@@ -44,14 +44,14 @@ source("99_functions.R")
 barplot_var(member_tot_fac) +
   labs(title ="Number of associations one is a member ") 
 
-# As one can see from the distribution of number of memberships, it does not make sense to keep the total number memberships as a variable, since the wide majority is not even in a single organization. Nevertheless, knowing this also helps for the further analysis. We can now add the variable "are you member in at least one organisation?". Let us have a look an the distribution then.
+# As one can see from the distribution of number of memberships, it does not make sense to keep the total number memberships as a variable, since the wide majority is not even in a single organization. Nevertheless, knowing this also helps for the further analysis. We can now add the variable "are you member in at least one organisation?". Doing so includes the variable of activities that respondents may or may not be part of in a more reasonable way. Let us have a look an the distribution then.
 
 # binary variable
 
 barplot_var(member_any_fac) +
   labs(title ="Are you a member in any association")
 
-# we decided to keep the variable "are you a member of any of these organisations". Let us therefor have a quick look on how this weak tie influences the happiness and the life satisfaction of the Romanians.
+# we decided to keep the variable "are you a member of any of these organisations". Let us therefore have a quick look on how this weak tie influences the happiness and the life satisfaction of the Romanians.
 
 
 anymember_happy <-  romania %>%
@@ -72,7 +72,17 @@ anymember_satis <- romania %>%
 
 grid.arrange(anymember_happy, anymember_satis, nrow = 1)
 
-# INTERPRETATION            
+# The impact that being a member of any organisation has on life satisfaction or happiness of the romanian population is rather similar. For both cases we see a visible, but not overwhelming increase of respondents that report to be "very happy". For all else, there doesn't seem to be a large change in responses.
+
+# [UP FOR DISCUSSION]
+# This puts the decision to include the variable into perspective since the impact that it has on the responses seems to be rather limited.            
+
+
+
+
+
+
+
 
 
 ##### Additional variable: importance of friends
