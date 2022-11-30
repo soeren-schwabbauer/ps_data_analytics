@@ -74,4 +74,22 @@ freedom_satis <- romania %>%
 
 grid.arrange(freedom_happy, freedom_satis, nrow = 1)
 
-# INTERPRETATION ÜBER VERTEILUNG
+# From looking at the stacked barplot showing the realtion between happiness and freedom of choice and control we can
+# see that: 
+# - a very large portion of persons rate their happiness as "very happy" and "quite happy" group 3&4 more than 1&2
+# - looking at the "very happy" persons we can see that there is a trend that more people are "very happy" the
+# more control and freedom they possess in their lives, except for the persons in group 1 "not much" freedom are
+# almost equally "very happy" as grouß 3 which "rather agrees" with freedom of choice and control. Looking at the
+# "quite happy" portion of the graph there is no real trend as grouß 2&3 have more "quite happy" mentions than for 
+# for example group 4 where it rather would be expected. 
+# In the "not very happy" and "not at all happy" portions we cannot see a clear trend.
+
+# Analyzing the right graph which compares satisfaction in life with freedom of choice and control we notice:
+# here a much clearer trend across the board, we could generally say that the more freedom of choice and control
+# where perceived the more satisfied the persons where. The small irregularities in the very satisfied portion
+# where group 1 " not much" freedom was more "very satisfied" or in the portion "not satisfied at all" in group 1 &3
+# could be explained by samplesize, as the median was mentioned to be 8 so not a lot of sample size at least in 
+# "not much" and "a little" freedom of choice and control. 
+
+# We should further do correlation test and significance tests to show if trends are significant or not due to 
+# sample size or variance
