@@ -22,6 +22,10 @@ if (dir.exists("G:/Geteilte Ablagen/")) {
   
   INPUT = "G:/Shared drives/data_analytics/01_data_build/OUTPUT/"
   
+} else if (dir.exists("~/Google Drive/Geteilte Ablagen/")) {
+  
+  INPUT = "~/Google Drive/Geteilte Ablagen/data_analytics/01_data_build/OUTPUT/"
+  
 }
 
 
