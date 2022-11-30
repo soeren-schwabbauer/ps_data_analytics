@@ -182,6 +182,20 @@ romania <- romania %>%
 #romania$politics_satisfaction
 #romania$importance_democracy
 #####
+romania$relig_service
+romania$member_religion
+### active assosiations 
+romania <- romania %>% mutate(member_active = case_when((relig_service == 1 | relig_service == 2 & member_religion == 1) ~ 1,
+                                                        (member_sports == 1) ~ 1,
+                                                        (member_protest == 1) ~ 1,
+                                                        (member_charity == 1) ~ 1,
+                                                        (member_selfhelp == 1) ~ 1)) %>%
+  mutate(member_active = replace_na(member_active, 0)) %>%
+  
+  mutate(member_active_fac = case_when(member_active == 1 ~ "active member",
+                                       member_active == 0 ~ "inactive member"))
+         
+         
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
