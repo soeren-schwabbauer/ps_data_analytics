@@ -32,5 +32,5 @@ source("99_functions.R")
 barplot_var(imp_fam_fac) +
   labs( title = "Important in life: Family")
 
-# As we can see from the distibution, the vast majority of the  people in Romania (91%) see their family as "very important". This is for sure not a bad thing for the Romanian people, however it is not very helpful for our further analysis, since the distribution is very unequal. We are therefor not sure yet, if we are going to keep this variable in our further analysis, due the the lower power we have in the categories "rather important" , "not very important" and "not imporatant at all".
+# As we can see from the distribution, the vast majority of the  people in Romania (91%) see their family as "very important". This is for sure not a bad thing for the Romanian people, however it is not very helpful for our further analysis, since the distribution is very unequal. We are therefor not sure yet, if we are going to keep this variable in our further analysis, due the the lower power we have in the categories "rather important" , "not very important" and "not important at all".
 
