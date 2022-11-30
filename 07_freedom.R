@@ -10,6 +10,8 @@ rm(list = ls())
 library(dplyr)
 library(ggplot2)
 library(ggmosaic)
+library(gridExtra)
+library(tidyverse)
 
 # load df
 if (dir.exists("G:/Geteilte Ablagen/")) {
