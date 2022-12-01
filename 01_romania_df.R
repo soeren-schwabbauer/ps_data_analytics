@@ -122,7 +122,8 @@ romania$health_fac <- droplevels(romania$health_fac)
 romania$sex <-  droplevels(romania$sex_fac)
 romania$trust_fac <- droplevels(romania$trust_fac)
 romania$freedom_fac <- droplevels(romania$freedom_fac)
-
+romania$member_religion_fac <- as_factor(romania$member_religion)
+romania$member_activity_fac <- as_factor(romania$member_activity)
 
 # check for all variables
 
@@ -163,6 +164,10 @@ romania$imp_fam_fac <- as_factor(romania$imp_fam)
 romania$imp_friends <- drop_unused_value_labels(romania$imp_friends)
 romania$imp_friends <- reverse_labelled_values(romania$imp_friends)
 romania$imp_friends_fac <- as_factor(romania$imp_friends)
+
+romania$trust_neighbor <- drop_unused_value_labels(romania$trust_neighbor)
+romania$trust_neighbor <- reverse_labelled_values(romania$trust_neighbor)
+romania$trust_neighbor_fac <- as_factor(romania$trust_neighbor)
 ## add variable member_any: are you a member in any organisation
 romania <- romania %>% 
   
@@ -182,8 +187,7 @@ romania <- romania %>%
 #romania$politics_satisfaction
 #romania$importance_democracy
 #####
-romania$relig_service
-romania$member_religion
+
 ### active assosiations 
 romania <- romania %>% mutate(member_active = case_when((relig_service == 1 | relig_service == 2 & member_religion == 1) ~ 1,
                                                         (member_sports == 1) ~ 1,
