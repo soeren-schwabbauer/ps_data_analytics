@@ -51,35 +51,43 @@ romania <- data %>%
 
 
 
-### flip certain variables
-# higher number -> better
-# lower number -> worse
+
 
 
 
 # mutate new variables to factor
-romania <- romania %>%
+romania <- romania %>%  mutate(
   
-  mutate(income_scale_fac = as_factor(income_scale),
+### factorize levels & drop levels
+         income_scale_fac = as_factor(income_scale),
          income_scale_fac = droplevels(income_scale_fac),
          
          health_fac = as_factor(health),
+         health_fac = droplevels(health_fac),
          
          marst_fac = as_factor(marst),
+         marst_fac = droplevels(marst_fac),
          
          sex_fac = as_factor(sex),
+         sex_fac = droplevels(sex_fac),
          
          trust_fac = as_factor(trust),
+         trust_fac = droplevels(trust_fac),
          
-         freedom_fac = as_factor(freedom)) %>%
-  
-  mutate(age = as.numeric(age)) %>%
-  
+         freedom_fac = as_factor(freedom),
+         reedom_fac = droplevels(freedom_fac),
+         
+         member_religion_fac = as_factor(member_religion),
+         member_religion_fac = droplevels(member_religion_fac),
+         
+         member_activity_fac = as_factor(member_activity),
+         member_activity_fac = droplevels(member_activity_fac),
+         
+         age = as.numeric(age),
 
-  
-  # group satisfaction
-  mutate(satisfaction_fac = as_factor(satisfaction),,
-         
+### group varibales
+         satisfaction_fac = as_factor(satisfaction),
+         satisfaction_fac = droplevels(satisfaction_fac),
          satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "Not satisfied at all",
                                       as.numeric(satisfaction) == 2 |
                                         as.numeric(satisfaction) == 3 |
@@ -89,10 +97,9 @@ romania <- romania %>%
                                         as.numeric(satisfaction) == 7  |
                                         as.numeric(satisfaction) == 8 |
                                         as.numeric(satisfaction) == 9 ~ "Quiet satisfied",
-                                      as.numeric(satisfaction) == 10  ~ "Very satisfied")) %>%
-  
-  
-  mutate(relig_service_fac = case_when(as.numeric(relig_service) == 1  ~ "More than once a week",
+                                      as.numeric(satisfaction) == 10  ~ "Very satisfied"),
+         
+         relig_service_fac = case_when(as.numeric(relig_service) == 1  ~ "More than once a week",
                                        as.numeric(relig_service) == 2  ~ "Once a week",
                                        as.numeric(relig_service) == 3  ~ "Once a month",
                                        as.numeric(relig_service) == 4 |
@@ -100,11 +107,9 @@ romania <- romania %>%
                                        as.numeric(relig_service) == 6  ~ "Once a year",
                                        as.numeric(relig_service) == 7  ~ "Less often",
                                        as.numeric(relig_service) == 8  ~ "(Practically) Never"),
+         relig_service_fac = as_factor(relig_service_fac),
          
-         relig_service_fac = as_factor(relig_service_fac))%>%
-  
-  
-  mutate(freedom_group = case_when(as.numeric(freedom) == 1 |
+         freedom_group = case_when(as.numeric(freedom) == 1 |
                              as.numeric(freedom) == 2 |
                              as.numeric(freedom) == 3 |
                              as.numeric(freedom) == 4 ~ "1) not much",
@@ -113,23 +118,24 @@ romania <- romania %>%
                                      as.numeric(freedom) == 7 ~ "2) a little",
                            as.numeric(freedom) == 8 |
                              as.numeric(freedom) == 9  ~ "3) rather agree",
-                           as.numeric(freedom) == 10  ~ "4) a great deal"))
+                           as.numeric(freedom) == 10  ~ "4) a great deal"),
+
+          member_active = case_when((relig_service == 1 | relig_service == 2 & member_religion == 1) ~ 1,
+                                          (member_sports == 1) ~ 1,
+                                          (member_protest == 1) ~ 1,
+                                          (member_charity == 1) ~ 1,
+                                          (member_selfhelp == 1) ~ 1),
+
+          member_active = replace_na(member_active, 0),
+
+          member_active_fac = case_when(member_active == 1 ~ "active member",
+                              member_active == 0 ~ "inactive member"))
 
 
-romania$satisfaction_fac <- droplevels(romania$satisfaction_fac)
-romania$income_scale_fac <- droplevels(romania$income_scale_fac)
-romania$marst_fac <- droplevels(romania$marst_fac)
-romania$health_fac <- droplevels(romania$health_fac)
-romania$sex <-  droplevels(romania$sex_fac)
-romania$trust_fac <- droplevels(romania$trust_fac)
-romania$freedom_fac <- droplevels(romania$freedom_fac)
-romania$member_religion_fac <- as_factor(romania$member_religion)
-romania$member_activity_fac <- as_factor(romania$member_activity)
-
-# check for all variables
-
+### flip certain variables
+# higher number -> better
+# lower number -> worse
 # okay for:
-# satisfaction 
 romania$happy <- drop_unused_value_labels(romania$happy)
 romania$happy <- reverse_labelled_values(romania$happy)
 romania$happy_fac <- as_factor(romania$happy)
@@ -169,6 +175,7 @@ romania$imp_friends_fac <- as_factor(romania$imp_friends)
 romania$trust_neighbor <- drop_unused_value_labels(romania$trust_neighbor)
 romania$trust_neighbor <- reverse_labelled_values(romania$trust_neighbor)
 romania$trust_neighbor_fac <- as_factor(romania$trust_neighbor)
+
 ## add variable member_any: are you a member in any organisation
 romania <- romania %>% 
   
@@ -183,24 +190,9 @@ romania <- romania %>%
   mutate(member_tot_fac = as_factor(member_tot),
          member_tot_fac =fct_relevel(member_tot_fac,c("0","1","2","3","4","5","6","7","10")))
 
-###
-# do not flip
-#romania$politics_satisfaction
-#romania$importance_democracy
-#####
 
-### active assosiations 
-romania <- romania %>% mutate(member_active = case_when((relig_service == 1 | relig_service == 2 & member_religion == 1) ~ 1,
-                                                        (member_sports == 1) ~ 1,
-                                                        (member_protest == 1) ~ 1,
-                                                        (member_charity == 1) ~ 1,
-                                                        (member_selfhelp == 1) ~ 1)) %>%
-  mutate(member_active = replace_na(member_active, 0)) %>%
-  
-  mutate(member_active_fac = case_when(member_active == 1 ~ "active member",
-                                       member_active == 0 ~ "inactive member"))
-         
-         
+
+
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
