@@ -60,9 +60,8 @@ romania <- data %>%
 # mutate new variables to factor
 romania <- romania %>%
   
-  mutate(satisfaction_fac = as_factor(satisfaction),
-         
-         income_scale_fac = as_factor(income_scale),
+  mutate(income_scale_fac = as_factor(income_scale),
+         income_scale_fac = droplevels(income_scale_fac),
          
          health_fac = as_factor(health),
          
@@ -79,7 +78,9 @@ romania <- romania %>%
 
   
   # group satisfaction
-  mutate(satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "Not satisfied at all",
+  mutate(satisfaction_fac = as_factor(satisfaction),,
+         
+         satisfaction_group = case_when(as.numeric(satisfaction) == 1  ~ "Not satisfied at all",
                                       as.numeric(satisfaction) == 2 |
                                         as.numeric(satisfaction) == 3 |
                                         as.numeric(satisfaction) == 4 |
