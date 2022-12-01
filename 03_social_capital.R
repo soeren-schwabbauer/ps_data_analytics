@@ -29,77 +29,7 @@ if (dir.exists("G:/Geteilte Ablagen/")) {
 
 # load dataframe
 load(paste0(INPUT, "Romania.rda"))
-
-
-##### define themes and create functions for plotting ##########################
-
-### function + plot for general membership
-ties_var_summary <- function(var, var_char){
-  romania %>% select({{var}},contains("member_")) %>% rename(member = {{var}}) %>% melt() %>%
-    group_by(value, member) %>%
-    summarise(n = n()) %>%
-    mutate(prop = n/sum(n)) %>%
-    
-    mutate(value = replace(value, value == 1, "member"),
-           value = replace(value, value == 0, "no member"),
-           value = as_factor(value)) %>%
-    
-    ggplot(aes(x = (value), y = prop, fill = as_factor(member))) +
-    geom_bar(stat = "identity") +
-    labs(y = "Distribution (%)") + 
-    theme(
-      axis.title.x = element_blank(),
-      axis.text.x = element_text(angle=0),
-      #axis.title.y = element_blank(),
-      panel.background = element_rect(fill = "white"),
-      panel.grid.major.y = element_line(size = 0, linetype = 'solid',
-                                        colour = "grey") ,
-      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) ,
-      plot.subtitle = element_text(color = "black", size = 10, face = "italic")
-      
-    ) +
-    
-    scale_y_continuous(labels = scales::percent,
-                       breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) 
-}
-
-### function for each membership & type of neighbor + theme for the plots
-fun_happy <- function(cat, var, var_char){
-  romania %>% select({{cat}}, {{var}}) %>% rename(member = {{var}}) %>% mutate(cat = {{var_char}}) %>%
-    
-    mutate(member = as.character(as_factor(member)),
-           member = replace(member, member == "Mentioned", "yes"),
-           member = replace(member, member == "Not mentioned", "no"))
-}
-
-theme_cat <-   theme(
-  axis.title.x = element_blank(),
-  axis.text.x = element_text(angle=0),
-  #axis.title.y = element_blank(),
-  panel.background = element_rect(fill = "white"),
-  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
-                                    colour = "grey") ,
-  plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5) 
-) 
-  
-### Theme for Mosaic Plots
-mosaic_theme <-   theme( 
-  #legend.position = "none",
-  axis.title.x = element_blank(),
-  axis.title.y = element_blank(),
-  axis.text.x = element_text(angle=90, size = 7),
-  axis.text.y = element_text(size = 7),
-  panel.background = element_rect(fill = "white"),
-  panel.grid.major.y = element_line(size = 0, linetype = 'solid',
-                                    colour = "white") ,
-  legend.position = "none",
-  plot.title = element_text(color="black", size= 8, face="bold.italic", vjust = 0.5)
-) 
-
-
-################################################################################
-
-
+source("99_functions.R")
 
 
 ##### START REPORT #############################################################
@@ -167,11 +97,6 @@ grid.arrange(trust_plot, tableGrob(trust_summary),  heights = c(2, 0.5))
 # on a level of "can't be too careful. This rough overview already gives the 
 # impression, that the level of Social Capital is rather low in Romania.
 
-trust_var_summary <- function(var, var_char){
-  romania %>% select(trust_fac, {{var}}) %>% rename(member = {{var}}) %>% mutate(cat = {{var_char}})
-}
-
-
 bind_rows(trust_var_summary(happy_fac, "Happiness"),
           trust_var_summary(satisfaction_fac, "Satisfaction")) %>%
   
@@ -228,18 +153,17 @@ bind_rows(trust_var_summary(happy_fac, "Happiness"),
 # 6-9: 'Quite satisfied', 
 # 10: 'Very satisfied'.
 
-member_happy <- ties_var_summary(happy_fac, "Happiness") +
-  labs(title = "Level of happiness for (non) members",
-       fill = "Level of happiness",
-       subtitle = "of any group")
-  
-member_satisfaction <- ties_var_summary(satisfaction_group, "Satisfaction") +
-  labs(title = "Level of satisfaction for (non) members",
-       fill = "Level of satisfaction",
-       subtitle = "of any group")
-
-grid.arrange(member_happy, member_satisfaction, nrow = 1)
-
+grid.arrange(ties_var_summary(happy_fac, "Happiness") +
+               labs(title = "Level of happiness for (non) members",
+                    fill = "Level of happiness",
+                    subtitle = "of any group"),
+             
+             ties_var_summary(satisfaction_group, "Satisfaction") +
+               labs(title = "Level of satisfaction for (non) members",
+                    fill = "Level of satisfaction",
+                    subtitle = "of any group"), 
+             
+             nrow = 1)
 
 # It can be seen, that on average members of any given organisation or institution
 # are happier and more satisfied, than individuals who are not.
@@ -332,7 +256,6 @@ bind_rows( fun_happy(trust_neighbor, neighbours_diffrace, "have a different race
   facet_grid( ~ cat) +
   
   theme_cat
-
 # Starting off with drinking neighbors. To most people it doesn't really seem
 # to matter if their neighbors are drinkers or not. The two graphs barely differ
 # from each other. There is a small group of respondents that responds with
@@ -369,24 +292,26 @@ bind_rows( fun_happy(trust_neighbor, neighbours_diffrace, "have a different race
 # level of SWB, as we assume, that weak ties have a positive effect on the Social 
 # capital and therefor on the level of SWB.
 
-service_happy <-  romania %>%
-  ggplot() +
-  geom_mosaic(aes(x =  product(happy_fac, relig_service_fac), fill = happy_fac)) +
-  labs(title ="Comparison of happiness in life",
-       fill = "Scale of happiness",
-       subtitle = "with church service attendance") +
-  mosaic_theme
 
-service_satis <- romania %>%
-  ggplot() +
-  geom_mosaic(aes(x =  product(satisfaction_group, relig_service_fac), fill = satisfaction_group)) +
-  
-  labs(title ="Comparison of satisfaction",
-       fill = "Scale of satisfaction",
-       subtitle = "with church service attendance") +
-  mosaic_theme
 
-grid.arrange(service_happy, service_satis, nrow = 1)
+grid.arrange(romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(happy_fac, relig_service_fac), fill = happy_fac)) +
+               labs(title ="Comparison of happiness in life",
+                    fill = "Scale of happiness",
+                    subtitle = "with church service attendance") +
+               mosaic_theme,
+             
+             romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(satisfaction_group, relig_service_fac), fill = satisfaction_group)) +
+               
+               labs(title ="Comparison of satisfaction",
+                    fill = "Scale of satisfaction",
+                    subtitle = "with church service attendance") +
+               mosaic_theme,
+             
+             nrow = 1)
 
 # There doesn't seem to be a clear connection between church attendance and
 # happiness in life or life satisfaction. The mosaic patterns don't differ 
