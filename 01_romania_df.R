@@ -26,6 +26,13 @@ INPUT = "G:/Shared drives/data_analytics/01_data_build/INPUT/"
 OUTPUT = "G:/Shared drives/data_analytics/01_data_build/OUTPUT/"
 CODEBOOK = "G:/Shared drives/data_analytics/"
 
+} else if (dir.exists("~/Google Drive/Geteilte Ablagen/")) {
+  
+  
+INPUT = "~/Google Drive/Geteilte Ablagen/data_analytics/01_data_build/INPUT/"
+OUTPUT = "~/Google Drive/Geteilte Ablagen/data_analytics/01_data_build/OUTPUT/"
+CODEBOOK = "~/Google Drive/Geteilte Ablagen/data_analytics/"
+  
 }
 
 
@@ -75,7 +82,10 @@ romania <- romania %>%  mutate(
          trust_fac = droplevels(trust_fac),
          
          freedom_fac = as_factor(freedom),
-         reedom_fac = droplevels(freedom_fac),
+         freedom_fac = droplevels(freedom_fac),
+         
+         income_eq_fac = as_factor(income_equality),
+         income_eq_fac = droplevels(income_eq_fac),
          
          member_religion_fac = as_factor(member_religion),
          member_religion_fac = droplevels(member_religion_fac),
@@ -196,3 +206,4 @@ romania <- romania %>%
 
 ##### save file
 save(romania, file = paste0(OUTPUT, "romania.rda"))
+
