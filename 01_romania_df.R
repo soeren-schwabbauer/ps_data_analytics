@@ -84,8 +84,8 @@ romania <- romania %>%  mutate(
          freedom_fac = as_factor(freedom),
          freedom_fac = droplevels(freedom_fac),
          
-         income_eq_fac = as_factor(income_equality),
-         income_eq_fac = droplevels(income_eq_fac),
+         income_eqfac = as_factor(income_equality),
+         income_eqfac = droplevels(income_eqfac),
          
          member_religion_fac = as_factor(member_religion),
          member_religion_fac = droplevels(member_religion_fac),
