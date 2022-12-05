@@ -714,7 +714,7 @@ fviz_eig(pc.politics, addlabels = TRUE)
 
 ```
 
-Looking at the principal components and their visualization within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible “elbow” which would identify the number of components that need to be considered to cover most of the variance. The first component makes up for around 32% of the explained variance. This is relatively low as compared to other datasets, but is not a matter of concern. It simply indicates that a large majority (100-32,4 = 67,6%) of observations are distributed over more than one dimension. We want to reduce the data’s dimensionality and at the same time reach 80% of explained variance, hence we are left with 5 PC’s to reach a cumulative explained variance of 82,6%. 
+Looking at the principal components and their visualization within the screeplot it is tricky to clearly identify the number of PCs that should be considered. There is no clearly visible “elbow” which would identify the number of components that need to be considered to cover most of the variance. The first component makes up for around 32% of the explained variance. This is relatively low as compared to other datasets, but is not a matter of concern. It simply indicates that a large majority (100-32,4 = 67,6%) of observations are distributed over more than one dimension. We want to reduce the data’s dimensionality and at the same time reach 80% of explained variance, hence we are left with 3 PC’s to reach a cumulative explained variance of 63.9%. 
 
 
 
