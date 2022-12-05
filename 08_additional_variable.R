@@ -33,6 +33,33 @@ if (dir.exists("G:/Geteilte Ablagen/")) {
 load(paste0(INPUT, "romania.rda"))
 source("99_functions.R")
 
+
+# Barplot
+barplot_var(sex_fac)
+
+
+# Mosaic plot
+income_eq_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, sex_fac), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life \n and income equality",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+income_eq_satis <- romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, sex_fac), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life \n and income equality",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+
+grid.arrange(income_eq_happy, income_eq_satis, nrow = 1)
+
+
+
+##################################################################################################################
 # Add another variable that may be important and you are interested in.
 # Another variable that can increase happyness and satisfaction, both subjective measures, is income equality.
 # I would argue that income equality is highly subjective measure as well, as I could imagine living in poverty
