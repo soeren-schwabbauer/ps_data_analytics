@@ -776,6 +776,223 @@ What sticks out in comparing the first and fourth principal component, is that a
 </div>
 ___ 
 
+# Further Weak Ties
+
+
+The following plot shall give an overview of the distribution on how many people are acutally in a membership.
+```{r, echo=FALSE}
+barplot_var(member_tot_fac) +
+  labs(title ="Number of associations one is a member ") 
+```
+
+As one can see from the distribution of number of memberships, it does not make sense to keep the total number memberships as a variable, since the wide majority is not even in a single organization. Nevertheless, knowing this also helps for the further analysis. We can now add the variable "are you member in at least one organisation?". Doing so includes the variable of activities that respondents may or may not be part of in a more reasonable way. Let us have a look an the distribution of the dummy variable then.
+
+```{r, echo=FALSE}
+barplot_var(member_any_fac) +
+  labs(title ="Are you a member in any association")
+```
+
+Looking at the variable of activities as a binary "are you a member of any of these organisations" variable seems to make more sense since it splits the dataset into two comparable groups. Let us therefore consider, how this weak tie influences the happiness and the life satisfaction of the Romanians.
+
+```{r, echo=FALSE}
+grid.arrange(romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(happy_fac, member_any_fac), fill = happy_fac)) +
+               
+               labs(title ="Comparison of happiness in life \n and member in any organisation",
+                    fill = "Scale of happiness") +
+               mosaic_theme,
+             
+             romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(satisfaction_group, member_any_fac), fill = satisfaction_group)) +
+               
+               labs(title ="Comparison of satisfaction in life \n and member in any organisation",
+                    fill = "Scale of satisfaction") +
+               mosaic_theme,
+             
+             nrow = 1)
+```
+
+The impact that being a member of any organisation has on life satisfaction or happiness of the Romanian population is pretty similar. For both cases we see a visible, but not overwhelming increase of respondents that report to be "very happy". For all else, there doesn't seem to be a large change in responses.
+
+This puts the decision to include the variable into perspective since the impact that it has on the responses seems to be rather limited. After consideration, it might be better to omit the variable of activity membership for the case of Romania since the influence seems to be rather limited.        
+
+However, we followed an additional approach, which was categorizing the membership variables into active memberships, and rather inactive memberships. The following table provides an overview of our active organisations, where we assume people to have weak ties.
+
+  | **variables for active memberships**  | 
+  |---------|
+  | Belong to religious organization (given a person attends church at least once a week)    |
+  | Belong to edocation, arts, music or cultural activites       |
+  | Belong to venservation, the environment, ecology, animal rights    | 
+  | Belong to sports or recreation    | 
+  | Belong to humanitarian or charitable organization    | 
+  | Belong to self-help group, mutual aid group    |
+  
+This leaves us with 153 Romanians in the sample. Let us have a look at what this means on happiness and satisfaction.
+
+```{r, echo=FALSE}
+grid.arrange(romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(happy_fac, member_active_fac), fill = happy_fac)) +
+               
+               labs(title ="Comparison of happiness in life \n and member in any organisation",
+                    fill = "Scale of happiness") +
+               mosaic_theme,
+             
+             romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(satisfaction_group, member_active_fac), fill = satisfaction_group)) +
+               
+               labs(title ="Comparison of satisfaction in life \n and member in any organisation",
+                    fill = "Scale of satisfaction") +
+               mosaic_theme,
+             
+             nrow = 1)
+```
+
+Here we can see a similar result to the previous plot, however, we believe, that the variable "are you an active member of an organisation" is much more reliable in regards to evaluating weak ties. However, even when only considering the memberships considered to be more active, the effect on happiness or satisfaction still remains marginal. As a consequence, we will omit the variable of membership in further analyses.
+
+
+The next variable we will have a look at is the importance of friends. This can be seen as another weak tie as those who value the friends they have made in a certain area can be expected to be better integrated in their social system and be overall more content with their living situation. Let's start by looking at the overall distribution for the Romanian people:
+
+```{r, echo=FALSE}
+barplot_var(imp_friends_fac) +
+  labs(title ="How important are Friends to you? ") 
+```
+
+The barplot shows, that most of the Romanian respondents seem to place at least a certain bit of importance on their friends. Most of the respondents stated that friends are "rather important" to them. Closely following up is the group for which friends are "very important". Taking these groups together, we can estimate that around 82.22% of the Romanian respondents place at least a certain bit of value on their friends. This leads us to speculate that this variable might be relevant to include in further analysis. However, in order to be sure whether we should consider this variable further, let's look at how the importance of friends impacts life satisfaction and overall happiness
+
+```{r, echo=FALSE}
+grid.arrange(romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(happy_fac, imp_friends_fac), fill = happy_fac)) +
+               
+               labs(title ="Comparison of happiness in life \n and importance of friendship",
+                    fill = "Scale of happiness") +
+               mosaic_theme, 
+             
+             romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(satisfaction_group, imp_friends_fac), fill = satisfaction_group)) +
+               
+               labs(title ="Comparison of satisfaction in life \n and importance of friendship",
+                    fill = "Scale of satisfaction") +
+               mosaic_theme,
+             
+             nrow = 1)
+```
+
+Starting with the impact that the importance of friends has on happiness, we can see that the more important friends get, the larger are the percentages of respondents claiming to be quite or very happy. However, keeping the previous illustration in mind, we need to remember that the group sizes for friend importance were rather asymmetrical, with much more respondents stating that friends would be rather important. The overall theme however still seems to be that the more important friends are to a respondent, the more happy they appear to be. We can observe a similar effect when looking at life satisfaction. The effects previously mentioned can still be seen here, although slightly less pronounced. When comparing the groups it shows that those who consider their friends to be rather or very important also seem to respond being quite or very satisfied with their lives. And although the effects might not be as pronounced as we might have hoped, we still think it pays off to keep this variable in mind when proceeding in the analysis.
+
+
+# Strong Ties
+
+The variable "Important in life: Family" indicates another strong tie. In order to get an overview of the variable, let us have a look at the distribution. 
+
+```{r, echo=FALSE}
+barplot_var(imp_fam_fac) +
+  labs( title = "Important in life: Family")
+```
+
+As we can see from the distribution, the vast majority of the  people in Romania (91%) see their family as "very important". This is for sure not a bad thing for the Romanian people, however it is not very helpful for our further analysis, since the distribution is very unequal. Due to the low power that any analysis with this variable would have, the importance of family as a proxy for strong ties will be omitted in further analyses because of its asymmetrical distribution.
+
+# Freedom and Control
+
+An additional variable, that can influence life satisfaction and happiness in life is "How much freedom of choice and control" somebody has. The authors of the study describe the question as follows: some people feel they have completely free choice and control over their lives, and other people feel that what they do has no real effect on what happens to them. Please use the scale to indicate how much freedom of choice and control you feel you have over the way your life turns out?
+
+In order to get a first overview, let us have a look at the distribution of the variable.
+
+```{r, echo=FALSE}
+bar_freedom <- barplot_var(freedom_fac)
+box_freedom <- boxplot_for_barplot(freedom) +
+  labs(title = "How much freedom of choice and control do you think you have?") 
+grid.arrange(box_freedom, bar_freedom, nrow = 2, heights = c(0.5,2))
+```
+
+From looking at the boxplot we can see, that the median of the distribuiton is at the level of 8. Most people (32%) see themself to be very free, by answering at the highest level possible. almost 50% of the distribution chose a level the level of 9. The additional 50% of the remaining answers are distibuted in a declining distibution from 8 to 1. The lower levels, especially 1 to 4) may not have a lot of observations, however we do have quiet some oversvations for the upper levels. We therefor decided to bundle the variable as the follows: 
+
+  | **id**  | **variable**          |
+  |---------|-----------------------|
+  | 1-4     | not much       |
+  | 5-7    | a little     |
+  | 8-9    | rather agree    |
+  | 10    | A great deal     |
+
+This leaves us with the following distribution:
+
+```{r, echo=FALSE}
+summary(as_factor(romania$freedom_group))
+barplot_var(freedom_group) +
+  labs(title = "How much freedom of choice and control - by groups")
+```
+
+Looking at this distribution, we can observe that most of the respondents seem to feel at least a little in control of how their lives turn out. This is something we need to keep in mind when looking at the correlations between this feeling of control and our dependent variables.
+
+
+Let us now look if we can find some associations between life satisfaction or happiness in life together with the perceived control that citizens feel they have in their lives. 
+
+```{r, echo=FALSE}
+freedom_happy <-  romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(happy_fac, freedom_group), fill = happy_fac)) +
+  
+  labs(title ="Comparison of happiness in life \n and freedom of choice and control",
+       fill = "Scale of happiness") +
+  mosaic_theme
+
+freedom_satis <- romania %>%
+  ggplot() +
+  geom_mosaic(aes(x =  product(satisfaction_group, freedom_group), fill = satisfaction_group)) +
+  
+  labs(title ="Comparison of satisfaction in life \n and freedom of choice and control",
+       fill = "Scale of satisfaction") +
+  mosaic_theme
+
+grid.arrange(freedom_happy, freedom_satis, nrow = 1)
+```
+
+From looking at the mosaic plot, showing the relation between perceived freedom and happiness, a trend that we can observe is that the more people feel in control of their lives, the happier they tend to be. As previously mentioned we need to keep in mind that for those who feel not so much in control of their lives (group 1) we have a rather small sample size. This could be the reason why the trend that we can observe in groups 2 and 3 is not so much reflected in group 1. Looking at group 4 in particular, the trend also seems to be interrupted. However we can observe a higher percentage of respondents who feel like they have a lot of influence on their lives who also claim to be very happy as compared to groups 2 or 3.
+
+Analyzing the right graph which compares satisfaction in life to freedom of choice and control, we notice a much clearer trend across the board. We could generally say that the more the Romanian people feel in control of their lives, the more satisfied they were. It needs to be noted, that especially in the group that feels not so much in control (group 1) we are working with a rather small sample size. However, this does not diminish the trend otherwise observed in the dataset and leads us to the conclusion that we will consider this variable further.
+
+# Additional Variable: Marital Status subject to Gender
+
+
+The variable we have chosen for this exercise is the one of marital status subject to the gender of a given respondent. The reason for this is, that the way a respondent lives at home (in a partnership or by oneself) is an important indicator of their lifestyle and can be expected to influence their happiness or satisfaction to a certain extent. However, there are limitations to this variable. We have recoded the original data and grouped the responses for marital status into two broad categories: Living in a partnership or by oneself. The original data does not contain a response for non-official partnerships which would be an interesting information to have. Furthermore we cannot tell from this data how much value a given respondent places on their partnership. Nonetheless, the following barplot displays the distribution of marital status subject to gender of a respondent.
+
+```{r, echo=FALSE}
+barplot_var(romania$sex_married)
+```
+
+We can see, that generally there are more people in our dataset that live in a relationship. This is true for male and female respondents alike. However,the distribution is not too asymmetrical, which is why the following plots will examine the impact of marital status on happiness and satisfaction.
+
+```{r, echo=FALSE}
+grid.arrange(romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(happy_fac, sex_married), fill = happy_fac)) +
+               
+               labs(title ="Comparison of happiness in life \n depending on sex & partnershp status",
+                    fill = "Scale of happiness") +
+               mosaic_theme, 
+             
+             romania %>%
+               ggplot() +
+               geom_mosaic(aes(x =  product(satisfaction_group, sex_married), fill = satisfaction_group)) +
+               
+               labs(title ="Comparison of satisfaction in life \n depending on sex & partnershp status",
+                    fill = "Scale of satisfaction") +
+               mosaic_theme,
+             
+             nrow = 1)
+```
+
+Starting with happiness in life, we can observe a slight increase in the frequency of responses for "quite" or "very" happy. The main difference seems to be between the two groups "partnership" and "no partnership". The difference between the two genders is rather small. The main increase happens in the percentage of respondents claiming to be "quite happy" with their situation.
+
+For satisfaction, the picture is a lot less clear. It is almost impossible to observe a trend within the plot, as for instance as for instance the female respondents without a partnership seem to behave rather similarly as the male respondents living in a partnership. 
+
+Since we would expect that marital status has a uniform effect on happiness or satisfaction and the effect on happiness mentioned earlier is not overwhelmingly large, we decided to not include this variable in further analysis.
+
 
 
 
