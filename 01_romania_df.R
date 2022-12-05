@@ -94,6 +94,9 @@ romania <- romania %>%  mutate(
          member_activity_fac = droplevels(member_activity_fac),
          
          age = as.numeric(age),
+         
+         sex_fac = as.factor(sex),
+         sex_fac = droplevels(sex_fac),
 
 ### group varibales
          satisfaction_fac = as_factor(satisfaction),
