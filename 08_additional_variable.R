@@ -33,11 +33,12 @@ if (dir.exists("G:/Geteilte Ablagen/")) {
 load(paste0(INPUT, "romania.rda"))
 source("99_functions.R")
 
+#The variable we have chosen for this exercise is the one of marital status subject to the gender of a given respondent. The reason for this is, that the way a respondent lives at home (in a partnership or by oneself) is an important indicator of their lifestyle and can be expected to influence their happiness or satisfaction to a certain extent. However, there are limitations to this variable. We have recoded the original data and grouped the responses for marital status into two broad categories: Living in a partnership or by oneself. The original data does not contain a response for non-official partnerships which would be an interesting information to have. Furthermore we cannot tell from this data how much value a given respondent places on their partnership. Nonetheless, the following barplot displays the distribution of marital status subject to gender of a respondent.
 
-# Barplot
 barplot_var(romania$sex_married)
 
-# Mosaic plot
+#We can see, that generally there are more people in our dataset that live in a relationship. This is true for male and female respondents alike. However,the distribution is not too asymmetrical, which is why the following plots will examine the impact of marital status on happiness and satisfaction.
+
 
 grid.arrange(romania %>%
                ggplot() +
@@ -56,5 +57,13 @@ grid.arrange(romania %>%
                mosaic_theme,
              
              nrow = 1)
+
+#Starting with happiness in life, we can observe a slight increase in the frequency of responses for "quite" or "very" happy. The main difference seems to be between the two groups "partnership" and "no partnership". The difference between the two genders is rather small. The main increase happens in the percentage of respondents claiming to be "quite happy" with their situation.
+
+#For satisfaction, the picture is a lot less clear. It is almost impossible to observe a trend within the plot, as for instance as for instance the female respondents without a partnership seem to behave rather similarly as the male respondents living in a partnership. 
+
+# Since we would expect that marital status has a uniform effect on happiness or satisfaction and the effect on happiness mentioned earlier is not overwhelmingly large, we decided to not include this variable in further analysis.
+
+
 
 
