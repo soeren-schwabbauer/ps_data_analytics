@@ -95,9 +95,6 @@ romania <- romania %>%  mutate(
          
          age = as.numeric(age),
          
-         sex_fac = as.factor(sex),
-         sex_fac = droplevels(sex_fac),
-
 ### group varibales
          satisfaction_fac = as_factor(satisfaction),
          satisfaction_fac = droplevels(satisfaction_fac),
@@ -142,7 +139,14 @@ romania <- romania %>%  mutate(
           member_active = replace_na(member_active, 0),
 
           member_active_fac = case_when(member_active == 1 ~ "active member",
-                              member_active == 0 ~ "inactive member"))
+                              member_active == 0 ~ "inactive member"),
+
+sex_married = case_when((sex == 1 & marst < 3 ) ~ 'partnership, male',
+                        (sex == 1 & marst >= 3 ) ~ 'no partnership, male',
+                        (sex == 2 & marst < 3 ) ~ 'partnership, female',
+                        (sex == 2 & marst >= 3 ) ~ 'no partnership, female'))
+  
+  
 
 
 ### flip certain variables
