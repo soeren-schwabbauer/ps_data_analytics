@@ -73,14 +73,14 @@ grid.arrange(romania %>%
 
 # This puts the decision to include the variable into perspective since the impact that it has on the responses seems to be rather limited. After consideration, it might be better to omit the variable of activity membership for the case of Romania since the influence seems to be rather limited.        
 
-# However, we followed an additional approach, which was categorizing the membership variables into active memberships, and rather inactive memberships. The following tabel provides an overview of our active organisations, where we assume people to have weak ties.
+# However, we followed an additional approach, which was categorizing the membership variables into active memberships, and rather inactive memberships. The following table provides an overview of our active organisations, where we assume people to have weak ties.
 
 #  | **variables for active memberships**  | 
 #  |---------|
 #  | Belong to religious organization (given a person attends church at least once a week)    |
 #  | Belong to edocation, arts, music or cultural activites       |
 #  | Belong to venservation, the environment, ecology, animal rights    | 
-#  | Belongto sports or recreation    | 
+#  | Belong to sports or recreation    | 
 #  | Belong to humanitarian or charitable organization    | 
 #  | Belong to self-help group, mutual aid group    |
 # This leaves us with 153 Romanians in the sample. Let us have a look at what this means on happiness and satisfaction.
@@ -101,7 +101,9 @@ grid.arrange(romania %>%
                mosaic_theme,
              
              nrow = 1)
-# Here we can see a similar result to the previous plot, however, we believe, that the variable "are you an active memeber of an organisation" is much more reliable in regards to evaluating weak ties. 
+# Here we can see a similar result to the previous plot, however, we believe, that the variable "are you an active memeber of an organisation" is much more reliable in regards to evaluating weak ties. However, even when only considering the memberships considered to be more active, the effect on happiness or satisfaction still remains marginal. As a consequence, we will omit the variable of membership in further analyses.
+
+
 
 # The next variable we will have a look at is the importance of friends. This can be seen as another weak tie as those who value the friends they have made in a certain area can be expected to be better integrated in their social system and be overall more content with their living situation. Let's start by looking at the overall distribution for the Romanian people:
 
@@ -114,7 +116,7 @@ grid.arrange(romania %>%
                ggplot() +
                geom_mosaic(aes(x =  product(happy_fac, imp_friends_fac), fill = happy_fac)) +
                
-               labs(title ="Comparison of happiness in life \n and member in any organisation",
+               labs(title ="Comparison of happiness in life \n and importance of friendship",
                     fill = "Scale of happiness") +
                mosaic_theme, 
              
@@ -122,7 +124,7 @@ grid.arrange(romania %>%
                ggplot() +
                geom_mosaic(aes(x =  product(satisfaction_group, imp_friends_fac), fill = satisfaction_group)) +
                
-               labs(title ="Comparison of satisfaction in life \n and member in any organisation",
+               labs(title ="Comparison of satisfaction in life \n and importance of friendship",
                     fill = "Scale of satisfaction") +
                mosaic_theme,
              
