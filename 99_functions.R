@@ -43,7 +43,24 @@ barplot_var <- function(var){
     )
 }
 
-
+barplot_var_gender <- function(var,sex){
+  romania %>%
+    filter(sex_fac == paste0({{sex}})) %>%
+    ggplot(aes(x= {{var}}, y= ..count.. , fill = {{var}})) +
+    geom_bar() +
+    labs(x = "",
+         y = "total number") +
+    geom_text(stat = "count", aes(label= ..count..)) +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      panel.background = element_rect(fill = "white"),
+      panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "grey") ,
+      plot.title = element_text(color="black", size= 12, face="bold.italic", vjust = 0.5)
+      
+    )
+}
 boxplot_for_barplot <- function(var){
   romania %>%
     ggplot(aes(y = as.numeric({{var}}))) +
