@@ -93,6 +93,9 @@ romania <- romania %>%  mutate(
          member_activity_fac = as_factor(member_activity),
          member_activity_fac = droplevels(member_activity_fac),
          
+         educ_fac = as_factor(educ),
+         educ_fac = droplevels(educ_fac),
+         
          age = as.numeric(age),
          
 ### group varibales
@@ -141,10 +144,14 @@ romania <- romania %>%  mutate(
           member_active_fac = case_when(member_active == 1 ~ "active member",
                               member_active == 0 ~ "inactive member"),
 
-sex_married = case_when((sex == 1 & marst < 3 ) ~ 'partnership, male',
+          sex_married = case_when((sex == 1 & marst < 3 ) ~ 'partnership, male',
                         (sex == 1 & marst >= 3 ) ~ 'no partnership, male',
                         (sex == 2 & marst < 3 ) ~ 'partnership, female',
-                        (sex == 2 & marst >= 3 ) ~ 'no partnership, female'))
+                        (sex == 2 & marst >= 3 ) ~ 'no partnership, female'),
+
+          educ_group = case_when((educ >= 6) ~ 'College Education',
+                                 (educ >= 4 | educ <=5) ~ "High School Education",
+                                 (educ <= 3) ~ "Less than High School"))
   
   
 
@@ -152,7 +159,7 @@ sex_married = case_when((sex == 1 & marst < 3 ) ~ 'partnership, male',
 ### flip certain variables
 # higher number -> better
 # lower number -> worse
-# okay for:
+
 romania$happy <- drop_unused_value_labels(romania$happy)
 romania$happy <- reverse_labelled_values(romania$happy)
 romania$happy_fac <- as_factor(romania$happy)
