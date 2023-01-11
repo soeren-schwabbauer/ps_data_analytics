@@ -200,6 +200,10 @@ romania$trust_neighbor <- drop_unused_value_labels(romania$trust_neighbor)
 romania$trust_neighbor <- reverse_labelled_values(romania$trust_neighbor)
 romania$trust_neighbor_fac <- as_factor(romania$trust_neighbor)
 
+romania$health <- drop_unused_value_labels(romania$health)
+romania$health <- reverse_labelled_values(romania$health)
+romania$health_fac <- as_factor(romania$health)
+
 ## add variable member_any: are you a member in any organisation
 romania <- romania %>% 
   
