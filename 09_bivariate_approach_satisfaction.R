@@ -37,13 +37,13 @@ source("99_functions.R")
 # With satisfaction and freedom, we have two qualitative variables. For simplicity and due to the lack of a larger dataset, we would like to stick with the groups which we have created in the previous sections of this report. Let's have a look at the absolute frequencies in our data. 
 tab <- xtabs(~ freedom_group + satisfaction_group, data = romania)
 tab
-#In this table we can see, that the number of observations is indeed very small for the not satisfied at all group. Nevertheless, we can check, if there is a dependency of the level of freedom of choice and control on the satisfaction, meaning: Are people who believe their live to be free and who are belive to have more control in live, on average more satisfied in live?
+#In this table we can see, that the number of observations is indeed very small for the not satisfied at all group. Nevertheless, we can check, if there is a dependency of the level of freedom of choice and control on the satisfaction, meaning: Are people who believe their live to be free and who are believe to have more control in live, on average more satisfied in life?
 # We are going to perform a chi-square test. Our hypothesis shall be:
 # H0: The level of satisfaction does not depend on the amount of freedom of choice and control
-# H1: The level of satisfaction does depend on the amount of freedom of choice and conrol somebody believe to have in life.
+# H1: The level of satisfaction does depend on the amount of freedom of choice and control somebody believe to have in life.
 # We are going to test at a 5% level of significance.
 chisq.test(tab, correct = FALSE)
-# With a p-value of very close to 0, we can conclude, that there is a relationship between the two categorical variables. 
+# With a p-value of very close to 0, and a rather large value for the Chi^2 test statistic, we can conclude, that there is a relationship between the two categorical variables. 
 
 
 #### satisfaction ~ health
@@ -55,7 +55,7 @@ tab
 # H1: The status of health indeed has an effect on the level of satisfaction
 # and we are going to test at a 5% level of significance.
 chisq.test(tab, correct = FALSE)
-# We again retrieve a p-value very close to zero. This leads us to the conclusion, that we can reject the nullhypothesis and assume, that the status of health as an impact on the level of satisfaction. 
+# We again retrieve a p-value very close to zero and a rather large test statistic. This leads us to the conclusion, that we can reject the null-hypothesis and assume, that the status of health as an impact on the level of satisfaction. 
 
 #### satisfaction ~ educ
 # As an additional variable, we chose education. Hereby, we also decided to group education into three categories:
@@ -68,3 +68,10 @@ tab
 # H1: The level of education indeed has an effect on the satisfaction in life.
 chisq.test(tab, correct = TRUE)
 # With a p-value close to zero, we can reject the null hypothesis. This allows us to conclude, that the level of education has an impact on the life satisfaction. However, we would like to note, that this only implies a correlation. We believe, that the actual causation is biased through other factors. Since usually a higher level of education also implies a higher level of income. Money may not make somebody happier, however a sufficient income can guarantee a decent standard of living and therefor increase satisfaction in life. In order to test this hypothesis, we would have to run a multiple linear regression. 
+
+
+#### Simple linear regression model
+
+lm <-  lm(satisfaction_group ~ freedom_group + health + educ_group, data = romania)
+
+
