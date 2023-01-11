@@ -74,4 +74,7 @@ chisq.test(tab, correct = TRUE)
 
 lm <-  lm(romania$satisfaction ~ romania$freedom + romania$health + romania$educ)
 summary(lm)
+#INTERPRETATION
+#EXPLAIN THE DIFFERENT VARIABLES
+#ANOVA TABLE AND INTERPRETATION
 

@@ -69,5 +69,10 @@ grid.arrange(
 # H0: The mean of the male and female population does not differ
 # H1: The mean of the male and female population differs
 # We are going to test at a 5% level of significance.
+#WE CHOSE A WILCOXON TEST BECAUSE
 wilcox_test(satisfaction ~ sex_fac, data = romania, var.equal = TRUE)
 # The output leaves us with a p-value of 0.6954. This implies, that we cannot reject the Null hypothesis and assume, that the means among the male and female population does not differ significantly.
+
+#BECAUSE A LIKERT SCALE CAN ALSO BE INTERPRETED AS A CATEGORICAL VARIABLE WE ALSO CONDUCTED...
+t.test(romania$satisfaction ~ romania$sex_fac)
+#INTERPRETATION 
