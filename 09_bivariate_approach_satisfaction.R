@@ -72,6 +72,6 @@ chisq.test(tab, correct = TRUE)
 
 #### Simple linear regression model
 
-lm <-  lm(satisfaction_group ~ freedom_group + health + educ_group, data = romania)
-
+lm <-  lm(romania$satisfaction ~ romania$freedom + romania$health + romania$educ)
+summary(lm)
 
